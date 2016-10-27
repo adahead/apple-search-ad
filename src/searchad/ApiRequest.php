@@ -19,9 +19,19 @@ class ApiRequest extends BaseApi
     protected $curl, $curlInfo, $curlError, $response;
 
     public function __construct() {
+
+    }
+
+    protected function init(){
+        if (!$this->pemFile || !$this->keyFile) {
+            throw new \Exception("SSL certificate or key is not set");
+        }
         $this->curlInfo = [];
         $this->curlOptions = [
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSLCERT => $this->pemFile,
+            CURLOPT_SSLKEY => $this->keyFile,
+            CURLOPT_SSLCERTTYPE => 'PEM'
         ];
     }
 
@@ -49,7 +59,7 @@ class ApiRequest extends BaseApi
         if (!$url) {
             throw  new \Exception("Invalid url");
         }
-        $this->requestUrl = $this->getBaseUrl() . $url;
+        $this->requestUrl = $this->getBaseUrl() ."/". $url;
         return $this;
     }
 
@@ -103,6 +113,7 @@ class ApiRequest extends BaseApi
      * @return $this
      */
     public function run() {
+        $this->init();
         $this->curl = curl_init($this->requestUrl);
 
         $handleMethod = "handle" . ucfirst(strtolower($this->currentMethod));
@@ -116,8 +127,8 @@ class ApiRequest extends BaseApi
         $this->curlInfo = curl_getinfo($this->curl);
 
         curl_close($this->curl);
-        if(!$this->response && $this->curlError){
-            throw new \Exception("Curl error: ".$this->curlError);
+        if (!$this->response && $this->curlError) {
+            throw new \Exception("Curl error: " . $this->curlError);
         }
 
         return $this;
@@ -157,7 +168,7 @@ class ApiRequest extends BaseApi
             throw  new \Exception("PUT request should be provided by file. Use `setBody` or `setFile` method");
         }
         $creatingFile = false;
-        if(!$this->file) {
+        if (!$this->file) {
             $creatingFile = true;
             $file = "/tmp/search-ad-query-" . uniqid() . "-" . microtime() . -".json";
             if (!file_put_contents($file, $this->body)) {
@@ -169,7 +180,7 @@ class ApiRequest extends BaseApi
         $this->curlOptions[CURLOPT_INFILE] = $handler;
         $this->curlOptions[CURLOPT_INFILESIZE] = filesize($this->file);
         fclose($handler);
-        if($creatingFile){
+        if ($creatingFile) {
             unlink($this->file);
         }
         return $this;
@@ -205,7 +216,7 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setPost(){
+    public function setPost() {
         $this->currentMethod = 'POST';
         return $this;
     }
@@ -213,7 +224,7 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setGet(){
+    public function setGet() {
         $this->currentMethod = 'GET';
         return $this;
     }
@@ -221,7 +232,7 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setPut(){
+    public function setPut() {
         $this->currentMethod = 'PUT';
         return $this;
     }
@@ -229,7 +240,7 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setDelete(){
+    public function setDelete() {
         $this->currentMethod = 'DELETE';
         return $this;
     }
