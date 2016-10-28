@@ -54,6 +54,10 @@ class ApiResponse extends BaseApi
     protected $rawResponse, $responseArray;
     protected $responseHeaders = [];
     protected $data, $error, $pagination;
+    protected $httpCode;
+
+    //pagination
+    protected $total = 0, $returned = 0, $offset = 0;
 
     public function __construct()
     {
@@ -110,27 +114,123 @@ class ApiResponse extends BaseApi
         $this->data = $this->responseArray['data'];
         $this->pagination = isset($this->responseArray['pagination']) ? $this->responseArray['pagination'] : null;
         $this->error = isset($this->responseArray['error']) ? $this->responseArray['error'] : null;
+        $this->handlePagination();
+
+        $this->httpCode = isset($this->responseHeaders['http_code']) ? (int)$this->responseHeaders['http_code'] : null;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    private function handlePagination()
+    {
+        if (!$this->pagination) {
+            return $this;
+        }
+
+        $this->total = $this->pagination['totalResults'];
+        $this->returned = $this->pagination['itemsPerPage'];
+        $this->offset = $this->pagination['startIndex'];
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getData(){
+    public function getData()
+    {
         return $this->data;
     }
 
     /**
      * @return mixed
      */
-    public function getError(){
+    public function getError()
+    {
         return $this->error;
     }
 
     /**
      * @return mixed
      */
-    public function getPagination(){
+    public function getPagination()
+    {
         return $this->pagination;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isHttpCodeOk()
+    {
+        if (!$this->responseHeaders) {
+            throw  new \Exception("You should load response data at first");
+        }
+        if (!isset($this->responseHeaders['http_code'])) {
+            throw  new \Exception("Set headers are not valid(no http_code field)");
+        }
+
+        return $this->httpCode === 200 ? true : false;
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function httpCode(){
+        if (!$this->responseArray) {
+            throw  new \Exception("You should load response data at first");
+        }
+        return $this->httpCode;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isError()
+    {
+        if (!$this->responseArray) {
+            throw  new \Exception("You should load response data at first");
+        }
+        return $this->error ? true : false;
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function totalCount()
+    {
+        if (!$this->responseArray) {
+            throw  new \Exception("You should load response data at first");
+        }
+        return $this->total;
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function returnedCount()
+    {
+        if (!$this->responseArray) {
+            throw  new \Exception("You should load response data at first");
+        }
+        return $this->returned;
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function offsetCount()
+    {
+        if (!$this->responseArray) {
+            throw  new \Exception("You should load response data at first");
+        }
+        return $this->offset;
     }
 }

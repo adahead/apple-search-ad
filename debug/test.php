@@ -6,6 +6,7 @@
 
 include_once '../src/searchad/BaseApi.php';
 include_once '../src/searchad/ApiRequest.php';
+include_once '../src/searchad/ApiResponse.php';
 include_once '../src/searchad/reports/ReportingRequest.php';
 include_once '../src/searchad/campaign/CampaignRequest.php';
 include_once '../src/searchad/access/AccessRequest.php';
@@ -69,7 +70,13 @@ $acl = new \searchad\access\AccessRequest();
 
 $acl->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->queryUserACLs();
-var_dump($acl->getRawResponse());
+$data = $acl->getRawResponse();
+$info = $acl->getCurlInfo();
+
+$response = new \searchad\ApiResponse();
+
+$response->loadResponse($data, $info);
+var_dump($response->isHttpCodeOk(), $response->isError(), $response->getError());
 
 //var_dump($rep->getRawResponse(), $rep->getCurlInfo());
 
