@@ -1,4 +1,6 @@
 .idea
 *.log
-/debug
-!/debug/test.php
+
+/debug/test.key
+/debug/test.pem
+/debug/test.p12
