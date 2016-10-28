@@ -34,6 +34,16 @@ namespace searchad;
  *      ...
  *  ]
  * }
+ *
+ * "error": {
+ *  "errors": [
+ *      {
+ *          "messageCode": "SERVER_ERROR",
+ *          "message": "The server encountered an internal error or misconfiguration and was unable to complete request: 00faa33d-5406-4ac0-9872-05d2bb6d6161",
+ *          "field": ""
+ *      }
+ *  ]
+ * }
  * ------------------------
  * Class ApiResponse
  * @package searchad
@@ -43,6 +53,7 @@ class ApiResponse extends BaseApi
 
     protected $rawResponse, $responseArray;
     protected $responseHeaders = [];
+    protected $data, $error, $pagination;
 
     public function __construct()
     {
@@ -60,6 +71,7 @@ class ApiResponse extends BaseApi
         $this->responseHeaders = $headers;
         $this->validate();
         $this->responseArray = json_decode($this->rawResponse, true);
+        $this->baseHandle();
 
         return $this;
     }
@@ -88,5 +100,37 @@ class ApiResponse extends BaseApi
     protected function isJson($string)
     {
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function baseHandle()
+    {
+        $this->data = $this->responseArray['data'];
+        $this->pagination = isset($this->responseArray['pagination']) ? $this->responseArray['pagination'] : null;
+        $this->error = isset($this->responseArray['error']) ? $this->responseArray['error'] : null;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData(){
+        return $this->data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getError(){
+        return $this->error;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPagination(){
+        return $this->pagination;
     }
 }
