@@ -1,12 +1,24 @@
 {
-    "name": "kubrey/apple-search-ad",
-    "description": "API for Apple Search Ad",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Sergey Kubrey",
-            "email": "kubrey.work@gmail.com"
-        }
-    ],
-    "require": {}
+  "name": "kubrey/apple-search-ad",
+  "description": "API for Apple Search Ad",
+  "type": "library",
+  "keywords": [
+    "Apple",
+    "search ad",
+    "api",
+    "searchad"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Sergey Kubrey",
+      "email": "kubrey.work@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.1.*"
+  },
 }

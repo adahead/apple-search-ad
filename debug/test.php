@@ -34,7 +34,7 @@ $res = $cond->getConditions();
 $sel = new \searchad\selector\Selector();
 
 $selData = $sel->orderBy("modificationTime")
-    ->selectFields(["taps","impressions"])
+    ->selectFields(["taps", "impressions"])
     ->setLimit(10)
     ->setOffset(0)
     ->setConditions($res)
@@ -43,12 +43,20 @@ $selData = $sel->orderBy("modificationTime")
 $repParams1 = '{
     "startTime": "2016-01-01T00:00:00.000",
     "endTime": "2017-10-01T00:00:00.000",
-    "selector": '.$selData.',
+    "selector": ' . $selData . ',
     "granularity":"MONTHLY"
 }';
 $rep->queryReports($repParams1);
 
-var_dump(json_decode($rep->getRawResponse(),true));
+var_dump(json_decode($rep->getRawResponse(), true));
+
+//----
+
+$campaign = new \searchad\campaign\CampaignRequest();
+$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->queryCampaigns();
+
+var_dump($campaign->getRawResponse());
 
 
 //var_dump($rep->getRawResponse(), $rep->getCurlInfo());
