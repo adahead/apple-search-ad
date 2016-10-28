@@ -19,13 +19,14 @@ class AccessRequest extends ApiRequest
     }
 
     /**
+     * GET /v1/acls
      * User access control lists. Returns what roles a certificate may have on what org within the org tree.
      * Suitable for getting organization list per certificate pair
      * @throws \Exception
      */
     public function queryUserACLs()
     {
-        $this->setUrl('/acls')->setMethod('GET')->run();
+        $this->setUrl('/acls')->setGet()->run();
     }
 
 }

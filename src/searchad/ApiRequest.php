@@ -17,12 +17,17 @@ class ApiRequest extends BaseApi
     protected $headers = [];
     protected $curlOptions = [];
     protected $curl, $curlInfo, $curlError, $response;
+    protected $limit, $offset, $selectedFields = [];
+    protected $uriParams = "";
 
     public function __construct()
     {
 
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function init()
     {
         if (!$this->pemFile || !$this->keyFile) {
@@ -35,6 +40,17 @@ class ApiRequest extends BaseApi
             CURLOPT_SSLKEY => $this->keyFile,
             CURLOPT_SSLCERTTYPE => 'PEM'
         ];
+    }
+
+    /**
+     * @return $this
+     */
+    protected function resetParams()
+    {
+        $this->selectedFields = [];
+        $this->limit = null;
+        $this->offset = null;
+        return $this;
     }
 
     /**
@@ -59,11 +75,11 @@ class ApiRequest extends BaseApi
      */
     public function setUrl($url)
     {
-        $url = ltrim($url);
+        $url = ltrim($url, "/");
         if (!$url) {
             throw  new \Exception("Invalid url");
         }
-        $this->requestUrl = $this->getBaseUrl() . "/" . $url;
+        $this->requestUrl = $this->getBaseUrl() . "/" . trim($url);
         return $this;
     }
 
@@ -125,6 +141,7 @@ class ApiRequest extends BaseApi
     public function run()
     {
         $this->init();
+        $this->handleUriParams();
         $this->curl = curl_init($this->requestUrl);
 
         $handleMethod = "handle" . ucfirst(strtolower($this->currentMethod));
@@ -139,10 +156,36 @@ class ApiRequest extends BaseApi
         $this->curlInfo = curl_getinfo($this->curl);
 
         curl_close($this->curl);
+        $this->resetParams();
         if (!$this->response && $this->curlError) {
             throw new \Exception("Curl error: " . $this->curlError);
         }
 
+        return $this;
+    }
+
+    /**
+     * Handling offset, limit and fields get-params
+     */
+    protected function handleUriParams()
+    {
+        $params = [];
+        if (!is_null($this->offset)) {
+            $params['offset'] = (int)$this->offset;
+        }
+        if ($this->limit) {
+            $params['limit'] = (int)$this->limit;
+        }
+        if ($this->selectedFields) {
+            $params['fields'] = implode(',', $this->selectedFields);
+        }
+        var_dump($params);
+        if (!$params) {
+            return $this;
+        }
+        $this->uriParams = http_build_query($params);
+        $this->requestUrl .= "?" . $this->uriParams;
+        var_dump($this->uriParams);
         return $this;
     }
 
@@ -285,5 +328,27 @@ class ApiRequest extends BaseApi
     {
         $this->currentMethod = 'DELETE';
         return $this;
+    }
+
+    public function setLimit($limit)
+    {
+        $this->limit = (int)$limit;
+        return $this;
+    }
+
+    public function setOffset($offset)
+    {
+        $this->offset = $offset;
+        return $this;
+    }
+
+    public function setFields($fields)
+    {
+        if (!is_array($fields)) {
+            throw  new \Exception("Fields list should be array");
+        }
+        $this->selectedFields = $fields;
+        return $this;
+
     }
 }
