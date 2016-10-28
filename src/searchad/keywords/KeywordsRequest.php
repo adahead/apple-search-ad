@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author Sergey Kubrey <kubrey.work@gmail.com>
+ *
+ */
 
 namespace searchad\keywords;
 
@@ -14,7 +18,8 @@ class KeywordsRequest extends ApiRequest
      * @param string $selector
      * @throws \Exception
      */
-    public function queryTargetingBySelector($selector) {
+    public function queryTargetingBySelector($selector)
+    {
         if (!$selector) {
             throw new \Exception("No selector is set");
         }
@@ -28,7 +33,8 @@ class KeywordsRequest extends ApiRequest
      * @param $selector
      * @throws \Exception
      */
-    public function queryNegativeKeywordsBySelector($selector){
+    public function queryNegativeKeywordsBySelector($selector)
+    {
         if (!$selector) {
             throw new \Exception("No selector is set");
         }
@@ -42,7 +48,8 @@ class KeywordsRequest extends ApiRequest
      * @param $body
      * @throws \Exception
      */
-    public function createOrUpdateTargeting($body){
+    public function createOrUpdateTargeting($body)
+    {
         if (!$body) {
             throw new \Exception("No body is set");
         }
@@ -56,7 +63,8 @@ class KeywordsRequest extends ApiRequest
      * @param $body
      * @throws \Exception
      */
-    public function createOrUpdateNegative($body){
+    public function createOrUpdateNegative($body)
+    {
         if (!$body) {
             throw new \Exception("No body is set");
         }

@@ -1,29 +1,36 @@
 <?php
+/**
+ * @author Sergey Kubrey <kubrey.work@gmail.com>
+ *
+ */
 
 namespace searchad\campaign;
 
 use searchad\ApiRequest;
 
 
-class CampaignRequest extends ApiRequest{
+class CampaignRequest extends ApiRequest
+{
 
     /**
      * GET /v1/campaigns
      * Get a list of campaigns|one campaign if $id is set -  within a specific org
      * @param int $campaignId
      */
-    public function queryCampaigns($campaignId = null){
-        $url = $campaignId ? "campaigns/".$campaignId : "campaigns";
+    public function queryCampaigns($campaignId = null)
+    {
+        $url = $campaignId ? "campaigns/" . $campaignId : "campaigns";
         $this->setGet()->setUrl($url)->run();
     }
 
     /**
-    * POST /v1/campaigns
+     * POST /v1/campaigns
      * Create a new campaign within a specific org.
      * @param string $model contain json describing new campaign
      * @throws \Exception
      */
-    public function createCampaign($model){
+    public function createCampaign($model)
+    {
         $this->setPost()->setBody($model)->setUrl("campaigns")->run();
     }
 
@@ -33,7 +40,8 @@ class CampaignRequest extends ApiRequest{
      * @param string $selector
      * @throws \Exception
      */
-    public function queryCampaignsBySelector($selector){
+    public function queryCampaignsBySelector($selector)
+    {
         $this->setPost()->setBody($selector)->setUrl("campaigns")->run();
     }
 
@@ -44,12 +52,13 @@ class CampaignRequest extends ApiRequest{
      * @param string $update json with update fields
      * @throws \Exception
      */
-    public function updateCampaign($campaignId,$update){
-        if(!$campaignId){
+    public function updateCampaign($campaignId, $update)
+    {
+        if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
 
-        $this->setPut()->setBody($update)->setUrl("campaigns/".$campaignId)->run();
+        $this->setPut()->setBody($update)->setUrl("campaigns/" . $campaignId)->run();
     }
 
     /**
@@ -59,12 +68,13 @@ class CampaignRequest extends ApiRequest{
      * @param $adGroupId
      * @throws \Exception
      */
-    public function queryCampaignsAdGroups($campaignId, $adGroupId = null){
-        if(!$campaignId){
+    public function queryCampaignsAdGroups($campaignId, $adGroupId = null)
+    {
+        if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
 
-        $url = $adGroupId ? "campaigns/".$campaignId."/adgroups/".$adGroupId : "campaigns/".$campaignId."/adgroups";
+        $url = $adGroupId ? "campaigns/" . $campaignId . "/adgroups/" . $adGroupId : "campaigns/" . $campaignId . "/adgroups";
 
         $this->setGet()->setUrl($url)->run();
     }
@@ -75,12 +85,13 @@ class CampaignRequest extends ApiRequest{
      * @param $selector
      * @throws \Exception
      */
-    public function queryCampaignAdGroupsBySelector($campaignId, $selector){
-        if(!$campaignId){
+    public function queryCampaignAdGroupsBySelector($campaignId, $selector)
+    {
+        if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
 
-        $this->setPost()->setUrl("campaigns/".$campaignId."/adgroups/find")->setBody($selector)->run();
+        $this->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups/find")->setBody($selector)->run();
     }
 
     /**
@@ -90,15 +101,16 @@ class CampaignRequest extends ApiRequest{
      * @param $adGroupData
      * @throws \Exception
      */
-    public function createAdGroupInCampaign($campaignId,$adGroupData){
-        if(!$campaignId){
+    public function createAdGroupInCampaign($campaignId, $adGroupData)
+    {
+        if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
-        if(!$adGroupData){
+        if (!$adGroupData) {
             throw new \Exception("No adGroup data id is set");
         }
 
-        $this->setPost()->setUrl("campaigns/".$campaignId."/adgroups")->setBody($adGroupData)->run();
+        $this->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups")->setBody($adGroupData)->run();
     }
 
     /**
@@ -109,21 +121,21 @@ class CampaignRequest extends ApiRequest{
      * @param string $updateData
      * @throws \Exception
      */
-    public function updateAdGroupInCampaign($campaignId,$adGroupId,$updateData){
-        if(!$campaignId){
+    public function updateAdGroupInCampaign($campaignId, $adGroupId, $updateData)
+    {
+        if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
-        if(!$adGroupId){
+        if (!$adGroupId) {
             throw new \Exception("No adGroup  id is set");
         }
-        if(!$updateData){
+        if (!$updateData) {
             throw new \Exception("Update data is not set");
         }
 
-        $this->setPut()->setBody($updateData)->setUrl("campaigns/".$campaignId."/adgroups/".$adGroupId)->run();
+        $this->setPut()->setBody($updateData)->setUrl("campaigns/" . $campaignId . "/adgroups/" . $adGroupId)->run();
 
     }
-
 
 
 }

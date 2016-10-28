@@ -18,11 +18,13 @@ class ApiRequest extends BaseApi
     protected $curlOptions = [];
     protected $curl, $curlInfo, $curlError, $response;
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
-    protected function init(){
+    protected function init()
+    {
         if (!$this->pemFile || !$this->keyFile) {
             throw new \Exception("SSL certificate or key is not set");
         }
@@ -41,7 +43,8 @@ class ApiRequest extends BaseApi
      * @return $this
      * @throws \Exception
      */
-    public function setMethod($method) {
+    public function setMethod($method)
+    {
         if (!in_array(strtoupper($method), $this->methods)) {
             throw  new \Exception("Invalid method: " . $method);
         }
@@ -54,12 +57,13 @@ class ApiRequest extends BaseApi
      * @return $this
      * @throws \Exception
      */
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $url = ltrim($url);
         if (!$url) {
             throw  new \Exception("Invalid url");
         }
-        $this->requestUrl = $this->getBaseUrl() ."/". $url;
+        $this->requestUrl = $this->getBaseUrl() . "/" . $url;
         return $this;
     }
 
@@ -68,7 +72,8 @@ class ApiRequest extends BaseApi
      * @param string $data
      * @return $this
      */
-    public function setBody($data) {
+    public function setBody($data)
+    {
         $this->body = $data;
         return $this;
     }
@@ -80,7 +85,8 @@ class ApiRequest extends BaseApi
      * @return $this
      * @throws \Exception
      */
-    public function setFile($filePath) {
+    public function setFile($filePath)
+    {
         if (!is_file($filePath) || !is_readable($filePath)) {
             throw  new \Exception("Upload File path is not valid or file is not readable");
         }
@@ -93,7 +99,8 @@ class ApiRequest extends BaseApi
      * @param string $val
      * @return $this
      */
-    public function setRequestHeader($key, $val) {
+    public function setRequestHeader($key, $val)
+    {
         $this->headers[$key] = $val;
         return $this;
     }
@@ -102,8 +109,11 @@ class ApiRequest extends BaseApi
      * @param array $options
      * @return $this
      */
-    public function setCurlOptions($options) {
-        $this->curlOptions = array_merge($this->curlOptions, $options);
+    public function setCurlOptions($options)
+    {
+        foreach ($options as $key => $val) {
+            $this->curlOptions[$key] = $val;
+        }
         return $this;
     }
 
@@ -112,13 +122,15 @@ class ApiRequest extends BaseApi
      * @throws \Exception
      * @return $this
      */
-    public function run() {
+    public function run()
+    {
         $this->init();
         $this->curl = curl_init($this->requestUrl);
 
         $handleMethod = "handle" . ucfirst(strtolower($this->currentMethod));
 
         $this->{$handleMethod}();
+        $this->setHeaders();
 
         curl_setopt_array($this->curl, $this->curlOptions);
 
@@ -135,23 +147,43 @@ class ApiRequest extends BaseApi
     }
 
     /**
+     * Setting HTTP Headers from $this->headers to curl
+     * @return $this
+     */
+    protected function setHeaders()
+    {
+        if (!$this->headers) {
+            return $this;
+        }
+        $headers = [];
+        foreach ($this->headers as $key => $val) {
+            $headers[] = $key . ": " . $val;
+        }
+        $this->curlOptions[CURLOPT_HTTPHEADER] = $headers;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
-    public function getRawResponse() {
+    public function getRawResponse()
+    {
         return $this->response;
     }
 
     /**
      * @return mixed
      */
-    public function getCurlInfo() {
+    public function getCurlInfo()
+    {
         return $this->curlInfo;
     }
 
     /**
      * @return mixed
      */
-    public function getCurlError() {
+    public function getCurlError()
+    {
         return $this->curlError;
     }
 
@@ -162,7 +194,8 @@ class ApiRequest extends BaseApi
      * @return $this
      * @throws \Exception
      */
-    protected function handlePut() {
+    protected function handlePut()
+    {
         $this->curlOptions[CURLOPT_PUT] = true;
         if (!$this->body && !$this->file) {
             throw  new \Exception("PUT request should be provided by file. Use `setBody` or `setFile` method");
@@ -176,6 +209,7 @@ class ApiRequest extends BaseApi
             }
             $this->file = $file;
         }
+        $this->setRequestHeader('Content-type', 'application/json');
         $handler = fopen($this->file, 'r');
         $this->curlOptions[CURLOPT_INFILE] = $handler;
         $this->curlOptions[CURLOPT_INFILESIZE] = filesize($this->file);
@@ -189,10 +223,12 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    protected function handlePost() {
+    protected function handlePost()
+    {
         $this->curlOptions[CURLOPT_POST] = true;
         if ($this->body) {
             $this->curlOptions[CURLOPT_POSTFIELDS] = $this->body;
+            $this->setRequestHeader('Content-type', 'application/json');
         }
 
         return $this;
@@ -201,14 +237,16 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    protected function handleGet() {
+    protected function handleGet()
+    {
         return $this;
     }
 
     /**
      * @return $this
      */
-    protected function handleDelete() {
+    protected function handleDelete()
+    {
         return $this;
     }
 
@@ -216,7 +254,8 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setPost() {
+    public function setPost()
+    {
         $this->currentMethod = 'POST';
         return $this;
     }
@@ -224,7 +263,8 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setGet() {
+    public function setGet()
+    {
         $this->currentMethod = 'GET';
         return $this;
     }
@@ -232,7 +272,8 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setPut() {
+    public function setPut()
+    {
         $this->currentMethod = 'PUT';
         return $this;
     }
@@ -240,7 +281,8 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    public function setDelete() {
+    public function setDelete()
+    {
         $this->currentMethod = 'DELETE';
         return $this;
     }

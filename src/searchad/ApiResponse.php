@@ -44,7 +44,8 @@ class ApiResponse extends BaseApi
     protected $rawResponse, $responseArray;
     protected $responseHeaders = [];
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     /**
@@ -53,7 +54,8 @@ class ApiResponse extends BaseApi
      * @throws \Exception
      * @return $this
      */
-    public function loadResponse($data, $headers) {
+    public function loadResponse($data, $headers)
+    {
         $this->rawResponse = $data;
         $this->responseHeaders = $headers;
         $this->validate();
@@ -69,8 +71,9 @@ class ApiResponse extends BaseApi
      * @return $this
      * @throws \Exception
      */
-    protected function validate() {
-        if(!$this->isJson($this->rawResponse)){
+    protected function validate()
+    {
+        if (!$this->isJson($this->rawResponse)) {
             throw new \Exception("Response is not valid json");
         }
 
@@ -82,7 +85,8 @@ class ApiResponse extends BaseApi
      * @param $string
      * @return bool
      */
-    protected function isJson($string){
+    protected function isJson($string)
+    {
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 }

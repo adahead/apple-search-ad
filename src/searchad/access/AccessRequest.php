@@ -9,9 +9,11 @@ namespace searchad\access;
 use searchad\ApiRequest;
 
 
-class AccessRequest extends ApiRequest{
+class AccessRequest extends ApiRequest
+{
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
         $this->currentMethod = 'GET';
     }
@@ -21,7 +23,8 @@ class AccessRequest extends ApiRequest{
      * Suitable for getting organization list per certificate pair
      * @throws \Exception
      */
-    public function queryUserACLs(){
+    public function queryUserACLs()
+    {
         $this->setUrl('/acls')->setMethod('GET')->run();
     }
 
