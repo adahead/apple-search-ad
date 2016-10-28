@@ -7,6 +7,7 @@
 include_once '../src/searchad/BaseApi.php';
 include_once '../src/searchad/ApiRequest.php';
 include_once '../src/searchad/reports/ReportingRequest.php';
+include_once '../src/searchad/campaign/CampaignRequest.php';
 
 include_once '../src/searchad/selector/Conditions.php';
 include_once '../src/searchad/selector/Selector.php';
@@ -46,18 +47,20 @@ $repParams1 = '{
     "selector": ' . $selData . ',
     "granularity":"MONTHLY"
 }';
-$rep->queryReports($repParams1);
+//$rep->queryReports($repParams1);
 
-var_dump(json_decode($rep->getRawResponse(), true));
+//var_dump(json_decode($rep->getRawResponse(), true));
 
 //----
+//Request with uri-params(limit and fields)
 
 $campaign = new \searchad\campaign\CampaignRequest();
 $campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->setLimit(1)
+    ->setFields(['adamId', 'budgetAmount'])
     ->queryCampaigns();
 
-var_dump($campaign->getRawResponse());
-
+var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
 
 //var_dump($rep->getRawResponse(), $rep->getCurlInfo());
 
