@@ -8,7 +8,7 @@
     "api",
     "searchad"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
     {
       "name": "Sergey Kubrey",
@@ -20,5 +20,5 @@
   },
   "require-dev": {
     "phpunit/phpunit": "4.1.*"
-  },
+  }
 }
