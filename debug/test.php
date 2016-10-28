@@ -8,6 +8,7 @@ include_once '../src/searchad/BaseApi.php';
 include_once '../src/searchad/ApiRequest.php';
 include_once '../src/searchad/reports/ReportingRequest.php';
 include_once '../src/searchad/campaign/CampaignRequest.php';
+include_once '../src/searchad/access/AccessRequest.php';
 
 include_once '../src/searchad/selector/Conditions.php';
 include_once '../src/searchad/selector/Selector.php';
@@ -60,7 +61,15 @@ $campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->setFields(['adamId', 'budgetAmount'])
     ->queryCampaigns();
 
-var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
+//var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
+
+//---
+
+$acl = new \searchad\access\AccessRequest();
+
+$acl->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->queryUserACLs();
+var_dump($acl->getRawResponse());
 
 //var_dump($rep->getRawResponse(), $rep->getCurlInfo());
 

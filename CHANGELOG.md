@@ -1,3 +1,7 @@
+# 1.0.4
+ - Access method fixed
+ - setUrl method trimming leading slash
+
 # 1.0.3
  - Support of `offset`\`limit` and partial selection through `fields` param.
  Provided by `ApiRequest` methods:

@@ -45,7 +45,8 @@ class ApiRequest extends BaseApi
     /**
      * @return $this
      */
-    protected function resetParams(){
+    protected function resetParams()
+    {
         $this->selectedFields = [];
         $this->limit = null;
         $this->offset = null;
@@ -74,11 +75,11 @@ class ApiRequest extends BaseApi
      */
     public function setUrl($url)
     {
-        $url = ltrim($url);
+        $url = ltrim($url, "/");
         if (!$url) {
             throw  new \Exception("Invalid url");
         }
-        $this->requestUrl = $this->getBaseUrl() . "/" . $url;
+        $this->requestUrl = $this->getBaseUrl() . "/" . trim($url);
         return $this;
     }
 
