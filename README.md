@@ -10,8 +10,15 @@ composer require "kubrey/apple-search-ad"
 require 'vendor/autoload.php';
 
 $campaign = new \searchad\campaign\CampaignRequest();
+
 $campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->queryCampaigns();
 
 var_dump($campaign->getRawResponse());
+
+$response = new \searchad\ApiResponse();
+
+$response->loadResponse($campaign->getRawResponse(),$campaign->getCurlInfo());
+
+$response->isHttpCodeOk();
 ```

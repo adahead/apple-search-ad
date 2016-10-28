@@ -1,3 +1,13 @@
+# 1.0.5
+
+ - `ApiResponse` class new methods for handling response data and headers, such as:
+    - `isHttpCodeOk`: bool
+    - `httpCode`: int
+    - `isError`: bool
+    - `totalCount`: int
+    - `returnedCount`: int
+    - `offsetCount`: int
+
 # 1.0.4
  - Access method fixed
  - setUrl method trimming leading slash
