@@ -1,0 +1,12 @@
+{
+    "name": "kubrey/apple-search-ad",
+    "description": "API for Apple Search Ad",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Sergey Kubrey",
+            "email": "kubrey.work@gmail.com"
+        }
+    ],
+    "require": {}
+}
