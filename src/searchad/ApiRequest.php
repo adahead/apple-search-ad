@@ -179,13 +179,11 @@ class ApiRequest extends BaseApi
         if ($this->selectedFields) {
             $params['fields'] = implode(',', $this->selectedFields);
         }
-        var_dump($params);
         if (!$params) {
             return $this;
         }
         $this->uriParams = http_build_query($params);
         $this->requestUrl .= "?" . $this->uriParams;
-        var_dump($this->uriParams);
         return $this;
     }
 

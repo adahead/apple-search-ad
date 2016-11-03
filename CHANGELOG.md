@@ -1,3 +1,6 @@
+# 1.0.6
+ - var_dumps removed from request handling method
+
 # 1.0.5
 
  - `ApiResponse` class new methods for handling response data and headers, such as:
