@@ -1,3 +1,6 @@
+# 1.1.1
+ - version update due to failed update in packagist
+
 # 1.1.0
  - search queries added for apps and geo location fetching
 
