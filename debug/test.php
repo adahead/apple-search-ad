@@ -14,6 +14,9 @@ include_once '../src/searchad/access/AccessRequest.php';
 include_once '../src/searchad/selector/Conditions.php';
 include_once '../src/searchad/selector/Selector.php';
 
+include_once '../src/searchad/search/AppsRequest.php';
+include_once '../src/searchad/search/GeoRequest.php';
+
 $rep = new \searchad\reports\ReportingRequest();
 
 $repParams = '{
@@ -77,6 +80,32 @@ $response = new \searchad\ApiResponse();
 
 $response->loadResponse($data, $info);
 var_dump($response->isHttpCodeOk(), $response->isError(), $response->getError());
+
+//-----------
+
+$apps = new searchad\search\AppsRequest();
+
+$apps->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->query("tinde");
+
+$r = new \searchad\ApiResponse();
+$r->loadResponse($apps->getRawResponse(),$apps->getCurlInfo());
+
+//var_dump($r->getData());
+
+//-------------
+
+$g = new searchad\search\GeoRequest();
+
+$g->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->query("new york");
+
+
+$r = new \searchad\ApiResponse();
+$r->loadResponse($g->getRawResponse(),$g->getCurlInfo());
+
+var_dump($g->getCurlInfo());
+var_dump($r->getData());
 
 //var_dump($rep->getRawResponse(), $rep->getCurlInfo());
 

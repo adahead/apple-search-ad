@@ -1,3 +1,6 @@
+# 1.1.0
+ - search queries added for apps and geo location fetching
+
 # 1.0.6
  - var_dumps removed from request handling method
 
@@ -16,7 +19,7 @@
  - setUrl method trimming leading slash
 
 # 1.0.3
- - Support of `offset`\`limit` and partial selection through `fields` param.
+ - Support of `offset`|`limit` and partial selection through `fields` param.
  Provided by `ApiRequest` methods:
       - `setLimit` accepting int
       - `setOffset` accepting int

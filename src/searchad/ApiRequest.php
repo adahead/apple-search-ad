@@ -19,6 +19,7 @@ class ApiRequest extends BaseApi
     protected $curl, $curlInfo, $curlError, $response;
     protected $limit, $offset, $selectedFields = [];
     protected $uriParams = "";
+    protected $uri = [];
 
     public function __construct()
     {
@@ -177,7 +178,12 @@ class ApiRequest extends BaseApi
             $params['limit'] = (int)$this->limit;
         }
         if ($this->selectedFields) {
-            $params['fields'] = implode(',', $this->selectedFields);
+            $params['fields'] = (implode(',', $this->selectedFields));
+        }
+        if ($this->uri) {
+            foreach ($this->uri as $key => $val) {
+                $params[$key] = ($val);
+            }
         }
         if (!$params) {
             return $this;
@@ -348,5 +354,20 @@ class ApiRequest extends BaseApi
         $this->selectedFields = $fields;
         return $this;
 
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return $this
+     * @throws \Exception
+     */
+    public function setUriParam($key, $value)
+    {
+        if (!$key || !$value) {
+            throw  new \Exception("Field and it's value should not be empty");
+        }
+        $this->uri[$key] = $value;
+        return $this;
     }
 }
