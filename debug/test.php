@@ -28,8 +28,7 @@ $repParams = '{
     "granularity":"MONTHLY"
 }';
 
-$rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
-    ->queryReports($repParams);
+$rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 
 $cond = new \searchad\selector\Conditions();
 $cond->addCondition("countryCode", \searchad\selector\Conditions::OPERATOR_IN, ["US"]);
@@ -39,22 +38,22 @@ $res = $cond->getConditions();
 
 $sel = new \searchad\selector\Selector();
 
-$selData = $sel->orderBy("modificationTime")
+$selData = $sel->orderBy("campaignId")
     ->selectFields(["taps", "impressions"])
-    ->setLimit(10)
+    ->setLimit(3)
     ->setOffset(0)
     ->setConditions($res)
-    ->getSelector(true);
+    ->getSelector();
 
-$repParams1 = '{
-    "startTime": "2016-01-01T00:00:00.000",
-    "endTime": "2017-10-01T00:00:00.000",
-    "selector": ' . $selData . ',
-    "granularity":"MONTHLY"
-}';
-//$rep->queryReports($repParams1);
+$rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
+    ->setStartTime('2016-11-01')
+    ->setEndTime('2016-11-05')
+    ->setSelector($selData)
+    ->queryReports();
 
-//var_dump(json_decode($rep->getRawResponse(), true));
+
+var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
+//exit();
 
 //----
 //Request with uri-params(limit and fields)
