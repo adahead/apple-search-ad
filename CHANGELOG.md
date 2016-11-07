@@ -1,3 +1,6 @@
+# 1.1.2
+ - Reports updated, parameters are set in chain and validating is added.
+
 # 1.1.1
  - version update due to failed update in packagist
 
