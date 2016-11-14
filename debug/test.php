@@ -50,10 +50,10 @@ $rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
     ->setEndTime('2016-10-22')
     ->setSelector($selData)
     ->setReturnRowTotals(true)
-    ->queryReports();
+    ->queryReportsSearchTerm(9923026);
 
-//var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
-//exit();
+var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
+exit();
 
 //----
 //Request with uri-params(limit and fields)
