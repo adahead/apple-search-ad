@@ -1,3 +1,7 @@
+# 1.1.3
+ - Method for setting orgId in request
+ - Updated method for reporting search terms
+
 # 1.1.2
  - Reports updated, parameters are set in chain and validating is added.
 
