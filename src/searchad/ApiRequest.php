@@ -370,4 +370,15 @@ class ApiRequest extends BaseApi
         $this->uri[$key] = $value;
         return $this;
     }
+
+    /**
+     * setting orgId to search within
+     * @param $orgId
+     * @return $this
+     */
+    public function setOrgId($orgId)
+    {
+        $this->setRequestHeader("Authorization", "orgId=" . (int)$orgId);
+        return $this;
+    }
 }

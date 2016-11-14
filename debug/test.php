@@ -31,7 +31,7 @@ $repParams = '{
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 
 $cond = new \searchad\selector\Conditions();
-$cond->addCondition("countryCode", \searchad\selector\Conditions::OPERATOR_IN, ["US"]);
+$cond->addCondition("campaignId", \searchad\selector\Conditions::OPERATOR_IN, ["9923026"]);
 //$cond->addCondition("modificationTime", \searchad\selector\Conditions::OPERATOR_LESS_THAN, ["2016-10-21T0:0:0.00"]);
 
 $res = $cond->getConditions();
@@ -46,13 +46,13 @@ $selData = $sel->orderBy("campaignId")
     ->getSelector();
 
 $rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
-    ->setStartTime('2016-11-01')
-    ->setEndTime('2016-11-05')
+    ->setStartTime('2016-10-22')
+    ->setEndTime('2016-10-22')
     ->setSelector($selData)
+    ->setReturnRowTotals(true)
     ->queryReports();
 
-
-var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
+//var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
 //exit();
 
 //----
@@ -61,11 +61,12 @@ var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
 $campaign = new \searchad\campaign\CampaignRequest();
 $campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->setLimit(1)
+    ->setOrgId(140550)
     ->setFields(['adamId', 'budgetAmount'])
     ->queryCampaigns();
 
-//var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
-
+var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
+exit();
 //---
 
 $acl = new \searchad\access\AccessRequest();
