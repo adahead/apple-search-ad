@@ -31,15 +31,15 @@ $repParams = '{
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 
 $cond = new \searchad\selector\Conditions();
-$cond->addCondition("campaignId", \searchad\selector\Conditions::OPERATOR_IN, ["9923026"]);
+//$cond->addCondition("campaignId", \searchad\selector\Conditions::OPERATOR_IN, ["9923026"]);
 //$cond->addCondition("modificationTime", \searchad\selector\Conditions::OPERATOR_LESS_THAN, ["2016-10-21T0:0:0.00"]);
 
 $res = $cond->getConditions();
 
 $sel = new \searchad\selector\Selector();
 
-$selData = $sel->orderBy("campaignId")
-    ->selectFields(["taps", "impressions"])
+$selData = $sel->orderBy("adGroupName")
+//    ->selectFields(["taps", "impressions"])
     ->setLimit(3)
     ->setOffset(0)
     ->setConditions($res)
@@ -53,7 +53,7 @@ $rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
     ->queryReportsSearchTerm(9923026);
 
 var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
-exit();
+//exit();
 
 //----
 //Request with uri-params(limit and fields)
@@ -66,7 +66,7 @@ $campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->queryCampaigns();
 
 var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
-exit();
+//exit();
 //---
 
 $acl = new \searchad\access\AccessRequest();

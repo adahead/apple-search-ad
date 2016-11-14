@@ -51,7 +51,7 @@ use searchad\ApiRequest;
 class ReportingRequest extends ApiRequest
 {
 
-    protected $granularity, $startTime, $endTime, $timezone, $groupBy, $returnRowTotals = false, $returnRecordsWithNoMetrics = false;
+    protected $granularity, $startTime, $endTime, $timezone, $groupBy, $returnRowTotals = null, $returnRecordsWithNoMetrics = false;
     protected $selector;
 
     const GRANULARITY_DAILY = 'DAILY';
@@ -161,6 +161,13 @@ class ReportingRequest extends ApiRequest
             throw new \Exception("No campaign id is set");
         }
         $this->checkRequired();
+        if($this->granularity && $this->granularity === static::GRANULARITY_HOURLY){
+            throw new \Exception("Granularity is invalid, can not be hourly");
+        }
+        if($this->granularity){
+            $this->setReturnRowTotals(null);
+        }
+        $this->setReturnRecordsWithNoMetrics(false);
 
         $this->setPost()->setUrl("reports/campaigns/" . $campaignId . "/searchterms")->setBody($this->compileRequestBody())->run();
     }
@@ -219,14 +226,14 @@ class ReportingRequest extends ApiRequest
     }
 
     /**
-     * @param bool $return
+     * @param bool|null $return
      * @return $this
      * @throws \Exception
      */
     public function setReturnRowTotals($return)
     {
-        if (!is_bool($return)) {
-            throw  new \Exception("Return row totals value should be boolean");
+        if (!is_bool($return) && !is_null($return)) {
+            throw  new \Exception("Return row totals value should be boolean or null");
         }
         $this->returnRowTotals = $return;
         return $this;
