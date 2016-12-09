@@ -21,6 +21,7 @@ class ApiRequest extends BaseApi
     protected $uriParams = "";
     protected $uri = [];
     protected $lastRequestInfo = [];
+    protected $requestStartTime = 0;
 
     protected $callbacks = [];
 
@@ -47,7 +48,8 @@ class ApiRequest extends BaseApi
             'url' => $this->requestUrl,
             'headers' => $this->headers,
             'body' => $this->body,
-            'time' => date('Y-m-d H:i:s')
+            'time' => date('Y-m-d H:i:s'),
+            'request_time' => microtime(true) - $this->requestStartTime
         ];
         return $this;
     }
@@ -77,6 +79,7 @@ class ApiRequest extends BaseApi
         $this->selectedFields = [];
         $this->limit = null;
         $this->offset = null;
+        $this->requestStartTime = 0;
         return $this;
     }
 
@@ -175,6 +178,7 @@ class ApiRequest extends BaseApi
 
         $this->{$handleMethod}();
         $this->setHeaders();
+        $this->requestStartTime = microtime(true);
 
         curl_setopt_array($this->curl, $this->curlOptions);
 

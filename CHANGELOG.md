@@ -1,3 +1,6 @@
+# 1.1.5
+ - Adding request time to `ApiRequest` callback
+
 # 1.1.4
  - `addCallback` method added to both `ApiRequest` and `ApiResponse` classes
  - `getLastRequestInfo` method added to `ApiRequest`, returns url, http method, post\put body and http headers
