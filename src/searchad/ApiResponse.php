@@ -56,6 +56,8 @@ class ApiResponse extends BaseApi
     protected $data, $error, $pagination;
     protected $httpCode;
 
+    protected $callbacks = [];
+
     //pagination
     protected $total = 0, $returned = 0, $offset = 0;
 
@@ -76,6 +78,7 @@ class ApiResponse extends BaseApi
         $this->validate();
         $this->responseArray = json_decode($this->rawResponse, true);
         $this->baseHandle();
+        $this->runCallbacks();
 
         return $this;
     }
@@ -179,7 +182,8 @@ class ApiResponse extends BaseApi
      * @return int
      * @throws \Exception
      */
-    public function httpCode(){
+    public function httpCode()
+    {
         if (!$this->responseArray) {
             throw  new \Exception("You should load response data at first");
         }
@@ -232,5 +236,43 @@ class ApiResponse extends BaseApi
             throw  new \Exception("You should load response data at first");
         }
         return $this->offset;
+    }
+
+    /**
+     * @param $cb
+     * @param array $params
+     * @return $this
+     * @throws \Exception
+     */
+    public function addCallback($cb, $params = [])
+    {
+        if (!is_callable($cb)) {
+            throw new \Exception("Passed variable should be callable");
+        }
+        if (!is_array($params)) {
+            throw new \Exception("Passed params variable should be an array");
+        }
+        $this->callbacks[] = [$cb, $params];
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function runCallbacks()
+    {
+        foreach ($this->callbacks as $callback) {
+            list($cb, $params) = $callback;
+            $params['_response'] = [
+                'error' => $this->error,
+                'totalCount' => $this->total,
+                'returnedCount' => $this->returned,
+                'code' => $this->httpCode,
+                'offsetCount' => $this->offset,
+                'time' => date('Y-m-d H:i:s')
+            ];
+            call_user_func_array($cb, $params);
+        }
+        return $this;
     }
 }

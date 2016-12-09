@@ -20,10 +20,36 @@ class ApiRequest extends BaseApi
     protected $limit, $offset, $selectedFields = [];
     protected $uriParams = "";
     protected $uri = [];
+    protected $lastRequestInfo = [];
+
+    protected $callbacks = [];
 
     public function __construct()
     {
 
+    }
+
+    /**
+     * @return array
+     */
+    public function getLastRequestInfo()
+    {
+        return $this->lastRequestInfo;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function setLastRequestInfo()
+    {
+        $this->lastRequestInfo = [
+            'method' => $this->currentMethod,
+            'url' => $this->requestUrl,
+            'headers' => $this->headers,
+            'body' => $this->body,
+            'time' => date('Y-m-d H:i:s')
+        ];
+        return $this;
     }
 
     /**
@@ -157,11 +183,44 @@ class ApiRequest extends BaseApi
         $this->curlInfo = curl_getinfo($this->curl);
 
         curl_close($this->curl);
+        $this->setLastRequestInfo();
+        $this->runCallbacks();
         $this->resetParams();
         if (!$this->response && $this->curlError) {
             throw new \Exception("Curl error: " . $this->curlError);
         }
 
+        return $this;
+    }
+
+    /**
+     * @param $cb
+     * @param array $params
+     * @return $this
+     * @throws \Exception
+     */
+    public function addCallback($cb, $params = [])
+    {
+        if (!is_callable($cb)) {
+            throw new \Exception("Passed variable should be callable");
+        }
+        if (!is_array($params)) {
+            throw new \Exception("Passed params variable should be an array");
+        }
+        $this->callbacks[] = [$cb, $params];
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function runCallbacks()
+    {
+        foreach ($this->callbacks as $callback) {
+            list($cb, $params) = $callback;
+            $params['_request'] = $this->lastRequestInfo;
+            call_user_func_array($cb, ['params' => [$params]]);
+        }
         return $this;
     }
 

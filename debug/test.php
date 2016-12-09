@@ -29,6 +29,12 @@ $repParams = '{
 }';
 
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
+$cb = function ($params) {
+    var_dump("Callback");
+    var_dump($params);
+};
+
+$rep->addCallback($cb, ['234']);
 
 $cond = new \searchad\selector\Conditions();
 //$cond->addCondition("campaignId", \searchad\selector\Conditions::OPERATOR_IN, ["9923026"]);
@@ -52,8 +58,17 @@ $rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
     ->setReturnRowTotals(true)
     ->queryReportsSearchTerm(9923026);
 
+$resp = new \searchad\ApiResponse();
+$resp->addCallback(function($params){
+    var_dump("response callback");
+    var_dump($params);
+},[]);
+$resp->loadResponse($rep->getRawResponse(),$rep->getCurlInfo());
+
+
+
 var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
-//exit();
+exit();
 
 //----
 //Request with uri-params(limit and fields)
@@ -89,7 +104,7 @@ $apps->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
     ->query("tinde");
 
 $r = new \searchad\ApiResponse();
-$r->loadResponse($apps->getRawResponse(),$apps->getCurlInfo());
+$r->loadResponse($apps->getRawResponse(), $apps->getCurlInfo());
 
 //var_dump($r->getData());
 
@@ -102,7 +117,7 @@ $g->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
 
 
 $r = new \searchad\ApiResponse();
-$r->loadResponse($g->getRawResponse(),$g->getCurlInfo());
+$r->loadResponse($g->getRawResponse(), $g->getCurlInfo());
 
 var_dump($g->getCurlInfo());
 var_dump($r->getData());
