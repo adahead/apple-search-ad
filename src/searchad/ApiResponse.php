@@ -239,6 +239,9 @@ class ApiResponse extends BaseApi
     }
 
     /**
+     * When passing arguments to callback, set them in 'params' key of $params
+     * $cb should be valid callback with $params arg - array of passed variables including _response
+     * e.g. $cb = function($params){var_dump($params['_response']);}
      * @param $cb
      * @param array $params
      * @return $this
@@ -257,13 +260,14 @@ class ApiResponse extends BaseApi
     }
 
     /**
+     *
      * @return $this
      */
     protected function runCallbacks()
     {
         foreach ($this->callbacks as $callback) {
             list($cb, $params) = $callback;
-            $params['_response'] = [
+            $params['params']['_response'] = [
                 'error' => $this->error,
                 'totalCount' => $this->total,
                 'returnedCount' => $this->returned,

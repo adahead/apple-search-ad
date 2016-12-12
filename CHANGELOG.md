@@ -1,3 +1,6 @@
+# 1.1.6 
+ - Updating callback run
+
 # 1.1.5
  - Adding request time to `ApiRequest` callback
 
