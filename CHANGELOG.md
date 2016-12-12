@@ -1,3 +1,6 @@
+# 1.1.7
+ - Setting result data in response callback in case of error
+
 # 1.1.6 
  - Updating callback run
 

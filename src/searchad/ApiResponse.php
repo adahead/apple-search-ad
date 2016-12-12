@@ -275,6 +275,10 @@ class ApiResponse extends BaseApi
                 'offsetCount' => $this->offset,
                 'time' => date('Y-m-d H:i:s')
             ];
+
+            if ($this->isError() || !$this->isHttpCodeOk()) {
+                $params['params']['_options']['result'] = $this->rawResponse;
+            }
             call_user_func_array($cb, $params);
         }
         return $this;
