@@ -1,3 +1,6 @@
+# 1.1.8
+ - PUT methods fixed
+
 # 1.1.7
  - Setting result data in response callback in case of error
 

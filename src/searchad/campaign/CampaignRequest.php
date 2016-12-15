@@ -48,6 +48,8 @@ class CampaignRequest extends ApiRequest
     /**
      * PUT /v1/campaigns/<CAMPAIGN_ID>
      * Update an existing campaign within a specific org.
+     * It should return updated campaign object
+     * Or http code 400 if update is invalid
      * @param int $campaignId
      * @param string $update json with update fields
      * @throws \Exception
@@ -56,6 +58,9 @@ class CampaignRequest extends ApiRequest
     {
         if (!$campaignId) {
             throw new \Exception("No campaign id is set");
+        }
+        if(!$update){
+            throw new \Exception("Update data is not set");
         }
 
         $this->setPut()->setBody($update)->setUrl("campaigns/" . $campaignId)->run();

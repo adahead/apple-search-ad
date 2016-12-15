@@ -17,6 +17,24 @@ include_once '../src/searchad/selector/Selector.php';
 include_once '../src/searchad/search/AppsRequest.php';
 include_once '../src/searchad/search/GeoRequest.php';
 
+//update
+$id = 10985361;
+$grid = 10985381;
+$api = new \searchad\campaign\CampaignRequest();
+$resp = new \searchad\ApiResponse();
+
+
+$api->loadCertificates(__DIR__ . '/kubrey-apple-ad.pem', __DIR__ . '/kubrey-apple-ad.key')
+    ->updateAdGroupInCampaign($id,$grid,json_encode(['status'=>'ENABLED']));
+//    ->updateCampaign($id,json_encode(['status'=>'ENABLED']));
+
+//var_dump($api->getRawResponse());
+$resp->loadResponse($api->getRawResponse(),$api->getCurlInfo());
+var_dump($resp->httpCode(),$resp->getData(),$resp->getError());
+exit();
+
+//end of update
+
 $rep = new \searchad\reports\ReportingRequest();
 
 $repParams = '{
@@ -135,4 +153,8 @@ var_dump($r->getData());
     },
     "granularity":"HOURLY"
 }' -H "Content-type: application/json" -X POST "https://api.searchads.apple.com/api/v1/reports/campaigns/"
+ */
+
+/*
+ * curl --cert  kubrey-apple-ad.pem --key kubrey-apple-ad.key -d '{"status":"ENABLED"}' -H "Content-type: application/json" -X PUT "https://api.searchads.apple.com/api/v1/campaigns/10985361"
  */

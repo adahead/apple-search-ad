@@ -22,6 +22,7 @@ class ApiRequest extends BaseApi
     protected $uri = [];
     protected $lastRequestInfo = [];
     protected $requestStartTime = 0;
+    protected $fileHandler = null;
 
     protected $callbacks = [];
 
@@ -80,6 +81,13 @@ class ApiRequest extends BaseApi
         $this->limit = null;
         $this->offset = null;
         $this->requestStartTime = 0;
+        if($this->fileHandler){
+            fclose($this->fileHandler);
+        }
+        $this->fileHandler = null;
+        if($this->file && is_readable($this->file)){
+            unlink($this->file);
+        }
         return $this;
     }
 
@@ -306,27 +314,28 @@ class ApiRequest extends BaseApi
      */
     protected function handlePut()
     {
-        $this->curlOptions[CURLOPT_PUT] = true;
+        $this->curlOptions[CURLOPT_CUSTOMREQUEST] = 'PUT';
         if (!$this->body && !$this->file) {
-            throw  new \Exception("PUT request should be provided by file. Use `setBody` or `setFile` method");
+            throw  new \Exception("PUT request should be provided by file or body. Use `setBody` or `setFile` method");
         }
-        $creatingFile = false;
-        if (!$this->file) {
-            $creatingFile = true;
-            $file = "/tmp/search-ad-query-" . uniqid() . "-" . microtime() . -".json";
-            if (!file_put_contents($file, $this->body)) {
-                throw new \Exception("Failed to save tmp file with data for PUT method");
-            }
-            $this->file = $file;
+        if($this->file){
+//            $creatingFile = false;
+//            if (!$this->file) {
+//                $creatingFile = true;
+//                $file = "/tmp/search-ad-query-" . uniqid() . "-" . microtime() . -".json";
+//                if (!file_put_contents($file, $this->body)) {
+//                    throw new \Exception("Failed to save tmp file with data for PUT method");
+//                }
+//                $this->file = $file;
+//            }
+
+            $handler = fopen($this->file, 'w');
+            $this->curlOptions[CURLOPT_INFILE] = $handler;
+            $this->curlOptions[CURLOPT_INFILESIZE] = filesize($this->file);
+        } elseif($this->body) {
+            $this->curlOptions[CURLOPT_POSTFIELDS] = $this->body;
         }
         $this->setRequestHeader('Content-type', 'application/json');
-        $handler = fopen($this->file, 'r');
-        $this->curlOptions[CURLOPT_INFILE] = $handler;
-        $this->curlOptions[CURLOPT_INFILESIZE] = filesize($this->file);
-        fclose($handler);
-        if ($creatingFile) {
-            unlink($this->file);
-        }
         return $this;
     }
 
