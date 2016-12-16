@@ -12,6 +12,9 @@ use searchad\ApiRequest;
 class KeywordsRequest extends ApiRequest
 {
 
+    const STATUS_ACTIVE = 'ACTIVE';
+    const STATUS_PAUSED = 'PAUSED';
+
     /**
      * POST /v1/keywords/targeting/find
      * Find a list of targeted keywords within a specific org.

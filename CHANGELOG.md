@@ -1,3 +1,6 @@
+# 1.1.9
+ - added constants for campaign, adgroup and keyword statuses
+
 # 1.1.8
  - PUT methods fixed
 

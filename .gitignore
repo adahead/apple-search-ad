@@ -5,6 +5,8 @@
 /debug/test.pem
 /debug/*.pem
 /debug/*.key
+/debug/*/*.pem
+/debug/*/*.key
 /debug/*.zip
 /debug/test.p12
 /vendor/

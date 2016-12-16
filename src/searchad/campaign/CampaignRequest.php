@@ -12,6 +12,15 @@ use searchad\ApiRequest;
 class CampaignRequest extends ApiRequest
 {
 
+    const STATUS_ENABLED = 'ENABLED';
+    const STATUS_PAUSED = 'PAUSED';
+
+    const SERVING_STATUS_RUNNING = 'RUNNING';
+    const SERVING_STATUS_NOT_RUNNING = 'NOT_RUNNING';
+
+    const DISPLAY_STATUS_RUNNING = 'RUNNING';
+    const DISPLAY_STATUS_ON_HOLD = 'ON_HOLD';
+    const DISPLAY_STATUS_PAUSED = 'PAUSED';
     /**
      * GET /v1/campaigns
      * Get a list of campaigns|one campaign if $id is set -  within a specific org
