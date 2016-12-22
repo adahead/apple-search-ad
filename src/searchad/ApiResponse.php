@@ -93,6 +93,7 @@ class ApiResponse extends BaseApi
     protected function validate()
     {
         if (!$this->isJson($this->rawResponse)) {
+            $this->runCallbacks();
             throw new \Exception("Response is not valid json");
         }
 

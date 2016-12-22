@@ -1,3 +1,6 @@
+# 1.1.10
+ - callback is called in a case of 500 error for failed validation
+
 # 1.1.9
  - added constants for campaign, adgroup and keyword statuses
 
