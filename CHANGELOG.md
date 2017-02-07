@@ -1,3 +1,6 @@
+# 1.1.12
+ - Proper beforeRequest callback
+
 # 1.1.11
  - Added ability to add beforeRequest callback
  - `allowRun` property: if set to false - disable request execution

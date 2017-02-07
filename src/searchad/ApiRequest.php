@@ -284,12 +284,13 @@ class ApiRequest extends BaseApi
             'url' => $this->requestUrl,
             'headers' => $this->headers,
             'body' => $this->body,
-            'time' => date('Y-m-d H:i:s')
+            'time' => date('Y-m-d H:i:s'),
+            'type' => $this->requestType
         ];
         foreach ($this->beforeCallbacks as $callback) {
             list($cb, $params) = $callback;
             $params['_request'] = $info;
-            call_user_func_array($cb, ['params' => [$params]]);
+            call_user_func_array($cb, ['params' => $params]);
         }
         return $this;
     }
