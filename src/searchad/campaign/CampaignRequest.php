@@ -29,7 +29,7 @@ class CampaignRequest extends ApiRequest
     public function queryCampaigns($campaignId = null)
     {
         $url = $campaignId ? "campaigns/" . $campaignId : "campaigns";
-        $this->setGet()->setUrl($url)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setGet()->setUrl($url)->run();
     }
 
     /**
@@ -40,7 +40,7 @@ class CampaignRequest extends ApiRequest
      */
     public function createCampaign($model)
     {
-        $this->setPost()->setBody($model)->setUrl("campaigns")->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setPost()->setBody($model)->setUrl("campaigns")->run();
     }
 
     /**
@@ -51,7 +51,7 @@ class CampaignRequest extends ApiRequest
      */
     public function queryCampaignsBySelector($selector)
     {
-        $this->setPost()->setBody($selector)->setUrl("campaigns")->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setBody($selector)->setUrl("campaigns")->run();
     }
 
     /**
@@ -72,7 +72,7 @@ class CampaignRequest extends ApiRequest
             throw new \Exception("Update data is not set");
         }
 
-        $this->setPut()->setBody($update)->setUrl("campaigns/" . $campaignId)->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setPut()->setBody($update)->setUrl("campaigns/" . $campaignId)->run();
     }
 
     /**
@@ -90,7 +90,7 @@ class CampaignRequest extends ApiRequest
 
         $url = $adGroupId ? "campaigns/" . $campaignId . "/adgroups/" . $adGroupId : "campaigns/" . $campaignId . "/adgroups";
 
-        $this->setGet()->setUrl($url)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setGet()->setUrl($url)->run();
     }
 
     /**
@@ -105,7 +105,7 @@ class CampaignRequest extends ApiRequest
             throw new \Exception("No campaign id is set");
         }
 
-        $this->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups/find")->setBody($selector)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups/find")->setBody($selector)->run();
     }
 
     /**
@@ -124,7 +124,7 @@ class CampaignRequest extends ApiRequest
             throw new \Exception("No adGroup data id is set");
         }
 
-        $this->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups")->setBody($adGroupData)->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setPost()->setUrl("campaigns/" . $campaignId . "/adgroups")->setBody($adGroupData)->run();
     }
 
     /**
@@ -147,7 +147,11 @@ class CampaignRequest extends ApiRequest
             throw new \Exception("Update data is not set");
         }
 
-        $this->setPut()->setBody($updateData)->setUrl("campaigns/" . $campaignId . "/adgroups/" . $adGroupId)->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)
+            ->setPut()
+            ->setBody($updateData)
+            ->setUrl("campaigns/" . $campaignId . "/adgroups/" . $adGroupId)
+            ->run();
 
     }
 

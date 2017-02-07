@@ -72,7 +72,7 @@ class ReportingRequest extends ApiRequest
     public function queryReports()
     {
         $this->checkRequired();
-        $this->setPost()->setUrl("reports/campaigns")->setBody($this->compileRequestBody())->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("reports/campaigns")->setBody($this->compileRequestBody())->run();
     }
 
     protected function compileRequestBody()
@@ -114,7 +114,7 @@ class ReportingRequest extends ApiRequest
         }
         $this->checkRequired();
 
-        $this->setPost()->setUrl("reports/campaigns/" . $campaignId . "/adgroups")->setBody($this->compileRequestBody())->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("reports/campaigns/" . $campaignId . "/adgroups")->setBody($this->compileRequestBody())->run();
     }
 
     /**
@@ -146,7 +146,7 @@ class ReportingRequest extends ApiRequest
         }
         $this->checkRequired();
 
-        $this->setPost()->setUrl("reports/campaigns/" . $campaignId . "/keywords")->setBody($this->compileRequestBody())->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("reports/campaigns/" . $campaignId . "/keywords")->setBody($this->compileRequestBody())->run();
     }
 
     /**
@@ -169,7 +169,7 @@ class ReportingRequest extends ApiRequest
         }
         $this->setReturnRecordsWithNoMetrics(false);
 
-        $this->setPost()->setUrl("reports/campaigns/" . $campaignId . "/searchterms")->setBody($this->compileRequestBody())->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("reports/campaigns/" . $campaignId . "/searchterms")->setBody($this->compileRequestBody())->run();
     }
 
     /**

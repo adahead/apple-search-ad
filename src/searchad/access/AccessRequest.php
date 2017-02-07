@@ -26,7 +26,7 @@ class AccessRequest extends ApiRequest
      */
     public function queryUserACLs()
     {
-        $this->setUrl('/acls')->setGet()->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setUrl('/acls')->setGet()->run();
     }
 
 }

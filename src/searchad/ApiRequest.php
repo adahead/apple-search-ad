@@ -8,8 +8,18 @@ namespace searchad;
 
 use searchad\BaseApi;
 
+/**
+ * Class ApiRequest
+ * @package searchad
+ *
+ * @property bool $allowRun - is querying enabled; Can be set within beforeRequestCallback
+ * @property string $requestType - W|R is request reading data from API or writing into API
+ */
 class ApiRequest extends BaseApi
 {
+    const REQUEST_MODE_WRITE = 'W';
+    const REQUEST_MODE_READ = 'R';
+
     protected $methods = ['GET', 'POST', 'PUT', 'DELETE'];
     protected $currentMethod = 'GET';
     protected $requestUrl;
@@ -23,8 +33,12 @@ class ApiRequest extends BaseApi
     protected $lastRequestInfo = [];
     protected $requestStartTime = 0;
     protected $fileHandler = null;
+    protected $requestMode = 'W';
+    protected $allowRun = true;
+    protected $requestType = 'R';
 
     protected $callbacks = [];
+    protected $beforeCallbacks = [];
 
     public function __construct()
     {
@@ -37,6 +51,13 @@ class ApiRequest extends BaseApi
     public function getLastRequestInfo()
     {
         return $this->lastRequestInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestType(){
+        return $this->requestType;
     }
 
     /**
@@ -73,6 +94,15 @@ class ApiRequest extends BaseApi
     }
 
     /**
+     * @param $type
+     * @return $this
+     */
+    public function setRequestType($type){
+        $this->requestType = $type;
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     protected function resetParams()
@@ -81,11 +111,11 @@ class ApiRequest extends BaseApi
         $this->limit = null;
         $this->offset = null;
         $this->requestStartTime = 0;
-        if($this->fileHandler){
+        if ($this->fileHandler) {
             fclose($this->fileHandler);
         }
         $this->fileHandler = null;
-        if($this->file && is_readable($this->file)){
+        if ($this->file && is_readable($this->file)) {
             unlink($this->file);
         }
         return $this;
@@ -178,6 +208,11 @@ class ApiRequest extends BaseApi
      */
     public function run()
     {
+        $this->runBeforeCallbacks();
+        if (!$this->allowRun) {
+            $this->response = json_encode(['data' => true]);
+            return $this;
+        }
         $this->init();
         $this->handleUriParams();
         $this->curl = curl_init($this->requestUrl);
@@ -231,6 +266,26 @@ class ApiRequest extends BaseApi
         foreach ($this->callbacks as $callback) {
             list($cb, $params) = $callback;
             $params['_request'] = $this->lastRequestInfo;
+            call_user_func_array($cb, ['params' => [$params]]);
+        }
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function runBeforeCallbacks()
+    {
+        $info = [
+            'method' => $this->currentMethod,
+            'url' => $this->requestUrl,
+            'headers' => $this->headers,
+            'body' => $this->body,
+            'time' => date('Y-m-d H:i:s')
+        ];
+        foreach ($this->beforeCallbacks as $callback) {
+            list($cb, $params) = $callback;
+            $params['_request'] = $info;
             call_user_func_array($cb, ['params' => [$params]]);
         }
         return $this;
@@ -318,7 +373,7 @@ class ApiRequest extends BaseApi
         if (!$this->body && !$this->file) {
             throw  new \Exception("PUT request should be provided by file or body. Use `setBody` or `setFile` method");
         }
-        if($this->file){
+        if ($this->file) {
 //            $creatingFile = false;
 //            if (!$this->file) {
 //                $creatingFile = true;
@@ -332,7 +387,7 @@ class ApiRequest extends BaseApi
             $handler = fopen($this->file, 'w');
             $this->curlOptions[CURLOPT_INFILE] = $handler;
             $this->curlOptions[CURLOPT_INFILESIZE] = filesize($this->file);
-        } elseif($this->body) {
+        } elseif ($this->body) {
             $this->curlOptions[CURLOPT_POSTFIELDS] = $this->body;
         }
         $this->setRequestHeader('Content-type', 'application/json');
@@ -451,6 +506,48 @@ class ApiRequest extends BaseApi
     public function setOrgId($orgId)
     {
         $this->setRequestHeader("Authorization", "orgId=" . (int)$orgId);
+        return $this;
+    }
+
+    /**
+     * @param $cb
+     * @param array $params
+     * @return $this
+     * @throws \Exception
+     */
+    public function addBeforeRequestCallback($cb, $params = [])
+    {
+        if (!is_callable($cb)) {
+            throw new \Exception("Passed variable should be callable");
+        }
+        if (!is_array($params)) {
+            throw new \Exception("Passed params variable should be an array");
+        }
+        $this->beforeCallbacks[] = [$cb, $params];
+        return $this;
+    }
+
+    /**
+     * @param $mode
+     * @return $this
+     */
+    public function setRequestMode($mode)
+    {
+        $modes = [static::REQUEST_MODE_READ, static::REQUEST_MODE_WRITE];
+        if (!in_array($mode, $modes)) {
+            return $this;
+        }
+        $this->requestMode = $mode;
+        return $this;
+    }
+
+    /**
+     * @param $boolValue
+     * @return $this
+     */
+    public function setAllowRun($boolValue)
+    {
+        $this->allowRun = (bool)$boolValue;
         return $this;
     }
 }

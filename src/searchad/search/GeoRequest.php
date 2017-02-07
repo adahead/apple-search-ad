@@ -18,7 +18,7 @@ class GeoRequest extends ApiRequest
      */
     public function query($filter)
     {
-        $this->setGet()->setUrl("search/geo")->setUriParam('query', $filter)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setGet()->setUrl("search/geo")->setUriParam('query', $filter)->run();
     }
 
     /**
@@ -28,6 +28,6 @@ class GeoRequest extends ApiRequest
      */
     public function queryNamesByData($selector)
     {
-        $this->setPost()->setBody($selector)->setUrl("search/geo")->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setBody($selector)->setUrl("search/geo")->run();
     }
 }

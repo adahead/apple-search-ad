@@ -25,6 +25,6 @@ class AppsRequest extends ApiRequest
             throw  new \Exception("Query field should be filled");
         }
 
-        $this->setGet()->setUrl("search/apps")->setUriParam('query', $filter)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setGet()->setUrl("search/apps")->setUriParam('query', $filter)->run();
     }
 }

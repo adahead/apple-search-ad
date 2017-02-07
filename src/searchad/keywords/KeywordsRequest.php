@@ -27,7 +27,7 @@ class KeywordsRequest extends ApiRequest
             throw new \Exception("No selector is set");
         }
 
-        $this->setPost()->setUrl("keywords/targeting/find")->setBody($selector)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("keywords/targeting/find")->setBody($selector)->run();
     }
 
     /**
@@ -42,7 +42,7 @@ class KeywordsRequest extends ApiRequest
             throw new \Exception("No selector is set");
         }
 
-        $this->setPost()->setUrl("keywords/negative/find")->setBody($selector)->run();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("keywords/negative/find")->setBody($selector)->run();
     }
 
     /**
@@ -57,7 +57,7 @@ class KeywordsRequest extends ApiRequest
             throw new \Exception("No body is set");
         }
 
-        $this->setPost()->setUrl("keywords/targeting")->setBody($body)->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setPost()->setUrl("keywords/targeting")->setBody($body)->run();
     }
 
     /**
@@ -72,7 +72,7 @@ class KeywordsRequest extends ApiRequest
             throw new \Exception("No body is set");
         }
 
-        $this->setPost()->setUrl("keywords/negative")->setBody($body)->run();
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setPost()->setUrl("keywords/negative")->setBody($body)->run();
     }
 
 }

@@ -1,3 +1,8 @@
+# 1.1.11
+ - Added ability to add beforeRequest callback
+ - `allowRun` property: if set to false - disable request execution
+ - `requestType` property contains type of request(W|R) - getting or setting data to API
+
 # 1.1.10
  - callback is called in a case of 500 error for failed validation
 

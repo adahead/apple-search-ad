@@ -47,6 +47,8 @@ namespace searchad;
  * ------------------------
  * Class ApiResponse
  * @package searchad
+ *
+ * @property bool $isDummy - true if request was not executed(allowRun = false in ApiRequest)
  */
 class ApiResponse extends BaseApi
 {
@@ -56,7 +58,11 @@ class ApiResponse extends BaseApi
     protected $data, $error, $pagination;
     protected $httpCode;
 
+    protected $dummyResponse = ['data' => true];
+
     protected $callbacks = [];
+
+    protected $isDummy = false;
 
     //pagination
     protected $total = 0, $returned = 0, $offset = 0;
@@ -77,6 +83,10 @@ class ApiResponse extends BaseApi
         $this->responseHeaders = $headers;
         $this->validate();
         $this->responseArray = json_decode($this->rawResponse, true);
+        if ($this->responseArray == $this->dummyResponse) {
+            $this->isDummy = true;
+        }
+
         $this->baseHandle();
         $this->runCallbacks();
 
@@ -120,7 +130,7 @@ class ApiResponse extends BaseApi
         $this->error = isset($this->responseArray['error']) ? $this->responseArray['error'] : null;
         $this->handlePagination();
 
-        $this->httpCode = isset($this->responseHeaders['http_code']) ? (int)$this->responseHeaders['http_code'] : null;
+        $this->httpCode = $this->isDummy ? 200 : (isset($this->responseHeaders['http_code']) ? (int)$this->responseHeaders['http_code'] : null);
         return $this;
     }
 
@@ -169,6 +179,9 @@ class ApiResponse extends BaseApi
      */
     public function isHttpCodeOk()
     {
+        if ($this->isDummy) {
+            return true;
+        }
         if (!$this->responseHeaders) {
             throw  new \Exception("You should load response data at first");
         }
@@ -266,6 +279,9 @@ class ApiResponse extends BaseApi
      */
     protected function runCallbacks()
     {
+        if ($this->isDummy) {
+            return $this;
+        }
         foreach ($this->callbacks as $callback) {
             list($cb, $params) = $callback;
             $params['params']['_response'] = [
