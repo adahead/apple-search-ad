@@ -56,7 +56,8 @@ class ApiRequest extends BaseApi
     /**
      * @return string
      */
-    public function getRequestType(){
+    public function getRequestType()
+    {
         return $this->requestType;
     }
 
@@ -71,7 +72,8 @@ class ApiRequest extends BaseApi
             'headers' => $this->headers,
             'body' => $this->body,
             'time' => date('Y-m-d H:i:s'),
-            'request_time' => microtime(true) - $this->requestStartTime
+            'request_time' => microtime(true) - $this->requestStartTime,
+            'request_type' => $this->requestType
         ];
         return $this;
     }
@@ -97,7 +99,8 @@ class ApiRequest extends BaseApi
      * @param $type
      * @return $this
      */
-    public function setRequestType($type){
+    public function setRequestType($type)
+    {
         $this->requestType = $type;
         return $this;
     }
