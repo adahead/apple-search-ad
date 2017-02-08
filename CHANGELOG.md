@@ -1,3 +1,6 @@
+# 1.1.13
+ - Adding lastRequestInfo to ApiResponse in loadData
+
 # 1.1.12
  - Proper beforeRequest callback
 

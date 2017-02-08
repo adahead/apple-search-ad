@@ -57,6 +57,7 @@ class ApiResponse extends BaseApi
     protected $responseHeaders = [];
     protected $data, $error, $pagination;
     protected $httpCode;
+    protected $lastRequestInfo = [];
 
     protected $dummyResponse = ['data' => true];
 
@@ -74,13 +75,15 @@ class ApiResponse extends BaseApi
     /**
      * @param string $data response from `curl_exec`
      * @param array $headers `curl_getinfo` result
+     * @param array $info  method getLastRequestInfo of ApiRequest
      * @throws \Exception
      * @return $this
      */
-    public function loadResponse($data, $headers)
+    public function loadResponse($data, $headers, $info = [])
     {
         $this->rawResponse = $data;
         $this->responseHeaders = $headers;
+        $this->lastRequestInfo = $info;
         $this->validate();
         $this->responseArray = json_decode($this->rawResponse, true);
         if ($this->responseArray == $this->dummyResponse) {
@@ -292,6 +295,7 @@ class ApiResponse extends BaseApi
                 'offsetCount' => $this->offset,
                 'time' => date('Y-m-d H:i:s')
             ];
+            $params['params']['_request'] = $this->lastRequestInfo;
 
             if ($this->isError() || !$this->isHttpCodeOk()) {
                 $params['params']['_options']['result'] = $this->rawResponse;
