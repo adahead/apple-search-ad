@@ -1,3 +1,9 @@
+# 1.1.14
+ - Adding `campaign` and `adGroup` serving state constants and get-methods:
+  
+   - `CampaignResponse::getServingStateReasons`
+   - `CampaignResponse::getAdGroupServingStateReasons`
+
 # 1.1.13
  - Adding lastRequestInfo to ApiResponse in loadData
 
