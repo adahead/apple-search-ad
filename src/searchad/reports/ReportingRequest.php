@@ -33,6 +33,8 @@ use searchad\ApiRequest;
  * adminArea
  * deviceClass
  * ageRange
+ * locality
+ * gender
  * @property array $groupBy
  *
  * @property bool $returnRowTotals Specify whether to return total of each row. Default is false.
@@ -254,12 +256,13 @@ class ReportingRequest extends ApiRequest
     }
 
     /**
+     * Geo params should also be set in condition query
      * @param  string $groupField
      * @throws \Exception
      */
     public function setGroupBy($groupField)
     {
-        $possible = ['countryCode', 'adminArea', 'deviceClass', 'ageRange'];
+        $possible = ['countryCode', 'adminArea', 'deviceClass', 'ageRange', 'locality', 'gender'];
         if (!in_array($groupField, $possible)) {
             throw  new \Exception("Group by field is invalid");
         }

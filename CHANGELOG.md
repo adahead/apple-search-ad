@@ -1,3 +1,6 @@
+# 1.1.15
+ - Adding `locality` and `gender` fields into group-by available fields for reports
+
 # 1.1.14
  - Adding `campaign` and `adGroup` serving state constants and get-methods:
   
