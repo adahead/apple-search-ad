@@ -1,3 +1,7 @@
+№ 1.1.16
+ - Adding `errorCode` field in callback params
+ - Adding http code in callback params in case of validation error
+
 # 1.1.15
  - Adding `locality` and `gender` fields into group-by available fields for reports
 

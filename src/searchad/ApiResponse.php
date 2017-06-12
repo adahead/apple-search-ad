@@ -53,9 +53,12 @@ namespace searchad;
 class ApiResponse extends BaseApi
 {
 
+    const ERROR_CODE_API = 'ERROR_API';
+    const ERROR_CODE_INVALID_KEYS = 'ERROR_INVALID_KEY';
+    const ERROR_CODE_INVALID_JSON = 'ERROR_INVALID_JSON';
     protected $rawResponse, $responseArray;
     protected $responseHeaders = [];
-    protected $data, $error, $pagination;
+    protected $data, $error, $pagination, $errorCode;
     protected $httpCode;
     protected $lastRequestInfo = [];
 
@@ -106,6 +109,8 @@ class ApiResponse extends BaseApi
     protected function validate()
     {
         if (!$this->isJson($this->rawResponse)) {
+            $this->error = "Response is not valid json";
+            $this->errorCode = static::ERROR_CODE_INVALID_JSON;
             $this->runCallbacks();
             throw new \Exception("Response is not valid json");
         }
@@ -131,6 +136,10 @@ class ApiResponse extends BaseApi
         $this->data = $this->responseArray['data'];
         $this->pagination = isset($this->responseArray['pagination']) ? $this->responseArray['pagination'] : null;
         $this->error = isset($this->responseArray['error']) ? $this->responseArray['error'] : null;
+        if($this->error){
+            $this->errorCode = static::ERROR_CODE_API;
+        }
+
         $this->handlePagination();
 
         $this->httpCode = $this->isDummy ? 200 : (isset($this->responseHeaders['http_code']) ? (int)$this->responseHeaders['http_code'] : null);
@@ -277,7 +286,7 @@ class ApiResponse extends BaseApi
     }
 
     /**
-     *
+     * If http code = 401 + errorCode = ERROR_INVALID_JSON -> certs are not valid
      * @return $this
      */
     protected function runCallbacks()
@@ -289,19 +298,25 @@ class ApiResponse extends BaseApi
             list($cb, $params) = $callback;
             $params['params']['_response'] = [
                 'error' => $this->error,
+                'errorCode' => $this->errorCode,
                 'totalCount' => $this->total,
                 'returnedCount' => $this->returned,
-                'code' => $this->httpCode,
+                'code' => $this->httpCode ? $this->httpCode : (isset($this->responseHeaders['http_code']) ? $this->responseHeaders['http_code'] : null),
                 'offsetCount' => $this->offset,
                 'time' => date('Y-m-d H:i:s')
             ];
             $params['params']['_request'] = $this->lastRequestInfo;
-
-            if ($this->isError() || !$this->isHttpCodeOk()) {
+            try {
+                if ($this->isError() || !$this->isHttpCodeOk()) {
+                    $params['params']['_options']['result'] = $this->rawResponse;
+                }
+            } catch(\Exception $exc){
                 $params['params']['_options']['result'] = $this->rawResponse;
+                $params['params']['_response']['error'] = $this->error ? $this->error : $exc->getMessage();
             }
             call_user_func_array($cb, $params);
         }
         return $this;
     }
+
 }
