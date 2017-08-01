@@ -306,6 +306,7 @@ class ApiResponse extends BaseApi
                 'time' => date('Y-m-d H:i:s')
             ];
             $params['params']['_request'] = $this->lastRequestInfo;
+            $params['params']['_curl_info'] = $this->responseHeaders;
             try {
                 if ($this->isError() || !$this->isHttpCodeOk()) {
                     $params['params']['_options']['result'] = $this->rawResponse;

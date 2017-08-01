@@ -267,6 +267,7 @@ class ApiRequest extends BaseApi
         foreach ($this->callbacks as $callback) {
             list($cb, $params) = $callback;
             $params['_request'] = $this->lastRequestInfo;
+            $params['_curl_info'] = $this->getCurlInfo();
             call_user_func_array($cb, ['params' => [$params]]);
         }
         return $this;
