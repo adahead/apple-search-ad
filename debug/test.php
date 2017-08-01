@@ -45,53 +45,53 @@ $repParams = '{
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 
 //--------------------
-//$resp->addCallback(function($params){
-//    var_dump($params['_request']);
-//},[]);
-//$rep->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
-//$sel = new \searchad\selector\Selector();
-//if (isset($params['SearchtermsSearch']['adGroupId'])) {
-//    //filtering by adGroupId if it is set
-//    $sel->setConditions([
-//        ['field' => 'adGroupId', 'operator' => 'EQUALS', 'values' => [$params['SearchtermsSearch']['adGroupId']]]
-//    ]);
-//}
-//
-//$offset = 0;
-//while(1) {
-//
-//    $selData = $sel
-//        ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
-//        ->setLimit(2000)
-//        ->selectFields(['searchTermText'])
-//        ->setOffset($offset)
-//        ->getSelector();
-//
-//    try {
-//        $rep->setStartTime('2017-07-01')
-//            ->setOrgId(49470)
-//            ->setEndTime('2017-07-30')
-//            ->setSelector($selData)
-//            ->setReturnRowTotals(true)
-//            ->setCurlOptions([CURLOPT_TIMEOUT => 30])
-//            ->setReturnRecordsWithNoMetrics(false)
-//            ->queryReportsSearchTerm(8661848);
-//
-//        $resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo(), $rep->getLastRequestInfo());
-//        var_dump($resp->totalCount());
-//        var_dump($resp->returnedCount());
-//        $offset += 2000;
-//        if (!$resp->returnedCount()) {
-//            break;
-//        }
-//    } catch(\Exception $e){
-//        var_dump($e->getMessage());
-//        exit;
-//    }
-//
-//
-//}
-//exit;
+$resp->addCallback(function($params){
+    var_dump($params['_request']);
+},[]);
+$rep->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
+$sel = new \searchad\selector\Selector();
+if (isset($params['SearchtermsSearch']['adGroupId'])) {
+    //filtering by adGroupId if it is set
+    $sel->setConditions([
+        ['field' => 'adGroupId', 'operator' => 'EQUALS', 'values' => [$params['SearchtermsSearch']['adGroupId']]]
+    ]);
+}
+
+$offset = 0;
+while(1) {
+
+    $selData = $sel
+        ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
+        ->setLimit(2000)
+        ->selectFields(['searchTermText'])
+        ->setOffset($offset)
+        ->getSelector();
+
+    try {
+        $rep->setStartTime('2017-07-01')
+            ->setOrgId(49470)
+            ->setEndTime('2017-07-30')
+            ->setSelector($selData)
+            ->setReturnRowTotals(true)
+            ->setCurlOptions([CURLOPT_TIMEOUT => 60])
+            ->setReturnRecordsWithNoMetrics(false)
+            ->queryReportsSearchTerm(8661848);
+
+        $resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo(), $rep->getLastRequestInfo());
+        var_dump($resp->totalCount());
+        var_dump($resp->returnedCount());
+        $offset += 2000;
+        if (!$resp->returnedCount()) {
+            break;
+        }
+    } catch(\Exception $e){
+        var_dump($e->getMessage());
+        exit;
+    }
+
+
+}
+exit;
 
 ///--------------------------------
 ///
