@@ -1,4 +1,8 @@
-№ 1.1.16
+# 1.1.17
+ - Adding `_curl_info` field to callback params array containing `curl_getinfo` data
+ - Fixed manual setting of curl options by `->setCurlOptions`
+
+# 1.1.16
  - Adding `errorCode` field in callback params
  - Adding http code in callback params in case of validation error
 
