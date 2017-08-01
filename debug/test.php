@@ -24,6 +24,7 @@ $grid = 10985381;
 $rep = new \searchad\reports\ReportingRequest();
 
 $resp = new \searchad\ApiResponse();
+
 //$html = "<!DOCTYPE html><html><head><title>Apache Tomcat/8.5.11 - Error report</title><style type=\"text/css\">h1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} h2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} h3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} body {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} b {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} p {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;} a {color:black;} a.name {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style> </head><body><h1>HTTP Status 401 - </h1><div class=\"line\"></div><p><b>type</b> Status report</p><p><b>message</b> <u></u></p><p><b>description</b> <u>This request requires HTTP authentication.</u></p><hr class=\"line\"><h3>Apache Tomcat/8.5.11</h3></body></html>";
 //try {
 //    $resp->loadResponse($html,[]);
@@ -42,6 +43,58 @@ $repParams = '{
 }';
 
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
+
+//--------------------
+//$resp->addCallback(function($params){
+//    var_dump($params['_request']);
+//},[]);
+//$rep->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
+//$sel = new \searchad\selector\Selector();
+//if (isset($params['SearchtermsSearch']['adGroupId'])) {
+//    //filtering by adGroupId if it is set
+//    $sel->setConditions([
+//        ['field' => 'adGroupId', 'operator' => 'EQUALS', 'values' => [$params['SearchtermsSearch']['adGroupId']]]
+//    ]);
+//}
+//
+//$offset = 0;
+//while(1) {
+//
+//    $selData = $sel
+//        ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
+//        ->setLimit(2000)
+//        ->selectFields(['searchTermText'])
+//        ->setOffset($offset)
+//        ->getSelector();
+//
+//    try {
+//        $rep->setStartTime('2017-07-01')
+//            ->setOrgId(49470)
+//            ->setEndTime('2017-07-30')
+//            ->setSelector($selData)
+//            ->setReturnRowTotals(true)
+//            ->setCurlOptions([CURLOPT_TIMEOUT => 30])
+//            ->setReturnRecordsWithNoMetrics(false)
+//            ->queryReportsSearchTerm(8661848);
+//
+//        $resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo(), $rep->getLastRequestInfo());
+//        var_dump($resp->totalCount());
+//        var_dump($resp->returnedCount());
+//        $offset += 2000;
+//        if (!$resp->returnedCount()) {
+//            break;
+//        }
+//    } catch(\Exception $e){
+//        var_dump($e->getMessage());
+//        exit;
+//    }
+//
+//
+//}
+//exit;
+
+///--------------------------------
+///
 $cb = function ($params) use ($rep) {
 
 //    var_dump("Callback for request mode");

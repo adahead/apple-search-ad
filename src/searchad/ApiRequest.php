@@ -87,12 +87,10 @@ class ApiRequest extends BaseApi
             throw new \Exception("SSL certificate or key is not set");
         }
         $this->curlInfo = [];
-        $this->curlOptions = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSLCERT => $this->pemFile,
-            CURLOPT_SSLKEY => $this->keyFile,
-            CURLOPT_SSLCERTTYPE => 'PEM'
-        ];
+        $this->curlOptions [CURLOPT_RETURNTRANSFER] = true;
+        $this->curlOptions [CURLOPT_SSLCERT] = $this->pemFile;
+        $this->curlOptions [CURLOPT_SSLKEY] = $this->keyFile;
+        $this->curlOptions [CURLOPT_SSLCERTTYPE] = 'PEM';
     }
 
     /**
