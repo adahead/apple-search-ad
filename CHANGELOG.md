@@ -1,3 +1,7 @@
+# 1.1.18
+ - Adding `BudgetOrdersRequest` class
+ - Adding `apps\appinfo` method into `search\AppsRequest` class
+
 # 1.1.17
  - Adding `_curl_info` field to callback params array containing `curl_getinfo` data
  - Fixed manual setting of curl options by `->setCurlOptions`

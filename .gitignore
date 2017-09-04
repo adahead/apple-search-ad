@@ -3,6 +3,8 @@
 
 #/debug/test.key
 #/debug/test.pem
+/debug/*.p12
+/debug/*/*.p12
 /debug/*.pem
 /debug/*.key
 /debug/test-budget.php
