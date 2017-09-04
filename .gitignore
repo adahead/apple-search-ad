@@ -1,10 +1,11 @@
 .idea
 *.log
 
-/debug/test.key
-/debug/test.pem
+#/debug/test.key
+#/debug/test.pem
 /debug/*.pem
 /debug/*.key
+/debug/test-budget.php
 /debug/*/*.pem
 /debug/*/*.key
 /debug/*.zip

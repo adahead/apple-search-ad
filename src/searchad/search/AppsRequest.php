@@ -19,12 +19,29 @@ class AppsRequest extends ApiRequest
      * @param $filter
      * @throws \Exception
      */
-    public function query($filter)
-    {
+    public function query($filter) {
         if (!$filter) {
             throw  new \Exception("Query field should be filled");
         }
 
         $this->setRequestType(static::REQUEST_MODE_READ)->setGet()->setUrl("search/apps")->setUriParam('query', $filter)->run();
+    }
+
+    /**
+     * Sample response item:
+     * {
+     * "adamId": <ADAM_ID_1>,
+     * "appName": "<APP_NAME_1>",
+     * "developerName": "<DEVELOPER_NAME>,
+     * "countryCodes": ["<ISO_ALPHA2_COUNTRYCODE>"]
+     * },
+     *
+     * @link https://developer.apple.com/library/content/documentation/General/Conceptual/AppStoreSearchAdsAPIReference/Campaign_Helpers.html#//apple_ref/doc/uid/TP40017495-CH22-SW32
+     * POST /v1/apps/appinfo
+     * Query for own applications
+     */
+    public function queryAppInfo() {
+        $this->setRequestHeader('Content-type', 'application/json');
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("apps/appinfo")->run();
     }
 }

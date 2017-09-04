@@ -45,37 +45,42 @@ $repParams = '{
 $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 
 //--------------------
-//$resp->addCallback(function ($params) {
-//    var_dump($params['_request']['request_time']);
-//}, []);
-//$rep->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
-//$sel = new \searchad\selector\Selector();
-//if (isset($params['SearchtermsSearch']['adGroupId'])) {
-//    //filtering by adGroupId if it is set
-//    $sel->setConditions([
-//        ['field' => 'adGroupId', 'operator' => 'EQUALS', 'values' => [$params['SearchtermsSearch']['adGroupId']]]
-//    ]);
-//}
-//
-//$offset = 0;
-//$topTime = 50000;
-//$start = microtime(true)*1000;
-//$curlTimeout = $topTime;
-//$limit = 1000;
-//while (1) {
-//    $queryTimes = [];
-//
-//    $beforeTime = microtime(true)*1000;
-//    $selData = $sel
-//        ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
-//        ->setLimit($limit)
-//        ->selectFields(['searchTermText'])
-//        ->setOffset($offset)
-//        ->getSelector();
-//
-//    var_dump("timeout: ".$curlTimeout);
-//
-//    try {
+$resp->addCallback(function ($params) {
+    var_dump($params['_request']['request_time']);
+}, []);
+$rep->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
+$sel = new \searchad\selector\Selector();
+if (isset($params['SearchtermsSearch']['adGroupId'])) {
+    //filtering by adGroupId if it is set
+    $sel->setConditions([
+        ['field' => 'adGroupId', 'operator' => 'EQUALS', 'values' => [$params['SearchtermsSearch']['adGroupId']]]
+    ]);
+}
+
+$offset = 0;
+$topTime = 50000;
+$start = microtime(true)*1000;
+$curlTimeout = $topTime;
+$limit = 1000;
+while (1) {
+    $queryTimes = [];
+
+    $beforeTime = microtime(true)*1000;
+    $selData = $sel
+        ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
+        ->setLimit($limit)
+        ->selectFields(['searchTermText'])
+        ->setOffset($offset)
+        ->getSelector();
+
+    var_dump("timeout: ".$curlTimeout);
+
+    try {
+        $repCmp = new \searchad\campaign\CampaignRequest();
+        $repCmp->loadCertificates(__DIR__ . '/pixel-gun/alexey.pem', __DIR__ . '/pixel-gun/alexey.key');
+        $repCmp->setOrgId(49470)
+//        $repCmp->setOrgId(334460)
+            ->queryCampaigns('640111933');
 //        $rep->setStartTime('2017-07-01')
 //            ->setOrgId(49470)
 //            ->setEndTime('2017-07-30')
@@ -84,44 +89,54 @@ $rep->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key');
 //            ->setCurlOptions([CURLOPT_TIMEOUT_MS => (int)$curlTimeout])
 //            ->setReturnRecordsWithNoMetrics(false)
 //            ->queryReportsSearchTerm(8661848);
-//
-//        $resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo(), $rep->getLastRequestInfo());
-//        var_dump($resp->totalCount());
-//        var_dump($resp->returnedCount());
-//
-//        //time
-//        $currentTime = microtime(true)*1000;
-//        $queryTimes[] = $currentTime - $beforeTime;
-//        if (($currentTime - $beforeTime) > $topTime * 0.5) {
-//            var_dump($queryTimes);
-//            echo "Last query take too long, no time for next request\n";
-//            break;
+
+        var_dump($repCmp->getCurlInfo());
+
+        $resp->loadResponse($repCmp->getRawResponse(), $repCmp->getCurlInfo(), $repCmp->getLastRequestInfo());
+        var_dump($resp->totalCount());
+        var_dump($resp->returnedCount());
+
+
+//        foreach($resp->getData() as $row){
+//            var_dump($row['name'], $row['orgId']);
+//            exit;
 //        }
-//        $avgTime = array_sum($queryTimes) / count($queryTimes);
-//
-//        $leftTime = $topTime - ($currentTime - $start);
-//        $curlTimeout = $leftTime;
-//        var_dump($leftTime);
-//
-//        if($leftTime<$avgTime){
-//            var_dump($queryTimes);
-//            echo "No time for next request\n";
-//            break;
-//        }
-//
-//        //end of time handle
-//        $offset += $limit;
-//        if (!$resp->returnedCount()) {
-//            break;
-//        }
-//    } catch (\Exception $e) {
-//        var_dump($e->getMessage());
-//        exit;
-//    }
-//
-//
-//}
-//exit;
+
+
+
+        //time
+        $currentTime = microtime(true)*1000;
+        $queryTimes[] = $currentTime - $beforeTime;
+        if (($currentTime - $beforeTime) > $topTime * 0.5) {
+            var_dump($queryTimes);
+            echo "Last query take too long, no time for next request\n";
+            break;
+        }
+        $avgTime = array_sum($queryTimes) / count($queryTimes);
+
+        $leftTime = $topTime - ($currentTime - $start);
+        $curlTimeout = $leftTime;
+        var_dump($leftTime);
+
+        if($leftTime<$avgTime){
+            var_dump($queryTimes);
+            echo "No time for next request\n";
+            break;
+        }
+
+        //end of time handle
+        $offset += $limit;
+        if (!$resp->returnedCount()) {
+            break;
+        }
+    } catch (\Exception $e) {
+        var_dump($e->getMessage());
+        exit;
+    }
+
+
+}
+exit;
 
 ///--------------------------------
 ///

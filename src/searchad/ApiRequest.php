@@ -405,8 +405,8 @@ class ApiRequest extends BaseApi
         $this->curlOptions[CURLOPT_POST] = true;
         if ($this->body) {
             $this->curlOptions[CURLOPT_POSTFIELDS] = $this->body;
-            $this->setRequestHeader('Content-type', 'application/json');
         }
+        $this->setRequestHeader('Content-type', 'application/json');
 
         return $this;
     }
