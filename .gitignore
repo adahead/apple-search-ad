@@ -6,7 +6,8 @@
 /debug/*.pem
 /debug/*.key
 /debug/test-budget.php
-/debug/*/*.pem
+/debug/melsoft/*.pem
+/debug/pixel-gun/*.pem
 /debug/*/*.key
 /debug/*.zip
 /debug/test.p12
