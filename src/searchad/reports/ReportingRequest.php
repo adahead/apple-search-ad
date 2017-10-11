@@ -257,16 +257,22 @@ class ReportingRequest extends ApiRequest
 
     /**
      * Geo params should also be set in condition query
-     * @param  string $groupField
+     * @param  string|array $groupField
      * @throws \Exception
      */
     public function setGroupBy($groupField)
     {
         $possible = ['countryCode', 'adminArea', 'deviceClass', 'ageRange', 'locality', 'gender'];
-        if (!in_array($groupField, $possible)) {
-            throw  new \Exception("Group by field is invalid");
+        $groupFields = is_string($groupField) ? [$groupField] : $groupField;
+        $validFields = [];
+        foreach($groupFields as $field){
+            if (!in_array($field, $possible)) {
+                throw  new \Exception("Group by field is invalid");
+            }
+            $validFields[] = $field;
         }
-        $this->groupBy = [$groupField];
+
+        $this->groupBy = $validFields;
     }
 
     /**

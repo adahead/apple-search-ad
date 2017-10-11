@@ -1,3 +1,6 @@
+# 1.1.19
+ - Allowing to group by array of fields in `ReporingRequest`
+
 # 1.1.18
  - Adding `BudgetOrdersRequest` class
  - Adding `apps\appinfo` method into `search\AppsRequest` class
