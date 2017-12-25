@@ -7,6 +7,7 @@
 /debug/*/*.p12
 /debug/*.pem
 /debug/*.key
+/debug/webmart/*
 /debug/test-budget.php
 /debug/melsoft/*.pem
 /debug/pixel-gun/*.pem

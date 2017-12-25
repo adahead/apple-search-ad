@@ -476,6 +476,11 @@ class ApiRequest extends BaseApi
         return $this;
     }
 
+    /**
+     * @param array $fields
+     * @return $this
+     * @throws \Exception
+     */
     public function setFields($fields)
     {
         if (!is_array($fields)) {
@@ -483,7 +488,6 @@ class ApiRequest extends BaseApi
         }
         $this->selectedFields = $fields;
         return $this;
-
     }
 
     /**

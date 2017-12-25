@@ -1,3 +1,7 @@
+# 1.1.20
+ - Fixed POST /v1/campaigns/find request `queryCampaignsBySelector`
+ - `queryCampaignsBySelector` now can receive array along with string
+
 # 1.1.19
  - Allowing to group by array of fields in `ReporingRequest`
 

@@ -33,6 +33,23 @@ $resp = new \searchad\ApiResponse();
 //}
 //exit;
 
+//----
+//Request with uri-params(limit and fields)
+
+$campaign = new \searchad\campaign\CampaignRequest();
+$campaign->loadCertificates(__DIR__ . '/kubrey-apple-ad.pem', __DIR__ . '/kubrey-apple-ad.key')
+    ->setLimit(1)
+    ->setOrgId(172500);
+//    ->setFields(['adamId', 'budgetAmount']);
+
+$selector = new \searchad\selector\Selector();
+$selector->setConditions([['field' => 'deleted', 'operator' => 'IN', 'values' => [true]]]);
+
+$campaign->queryCampaignsBySelector($selector);
+
+var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
+exit();
+
 $repParams = '{
     "startTime": "2016-01-01T00:00:00.000",
     "endTime": "2017-10-01T00:00:00.000",
@@ -59,13 +76,13 @@ if (isset($params['SearchtermsSearch']['adGroupId'])) {
 
 $offset = 0;
 $topTime = 50000;
-$start = microtime(true)*1000;
+$start = microtime(true) * 1000;
 $curlTimeout = $topTime;
 $limit = 1000;
 while (1) {
     $queryTimes = [];
 
-    $beforeTime = microtime(true)*1000;
+    $beforeTime = microtime(true) * 1000;
     $selData = $sel
         ->orderBy("localSpend", \searchad\selector\Selector::SORT_DESC)
         ->setLimit($limit)
@@ -73,7 +90,7 @@ while (1) {
         ->setOffset($offset)
         ->getSelector();
 
-    var_dump("timeout: ".$curlTimeout);
+    var_dump("timeout: " . $curlTimeout);
 
     try {
         $repCmp = new \searchad\campaign\CampaignRequest();
@@ -103,9 +120,8 @@ while (1) {
 //        }
 
 
-
         //time
-        $currentTime = microtime(true)*1000;
+        $currentTime = microtime(true) * 1000;
         $queryTimes[] = $currentTime - $beforeTime;
         if (($currentTime - $beforeTime) > $topTime * 0.5) {
             var_dump($queryTimes);
@@ -118,7 +134,7 @@ while (1) {
         $curlTimeout = $leftTime;
         var_dump($leftTime);
 
-        if($leftTime<$avgTime){
+        if ($leftTime < $avgTime) {
             var_dump($queryTimes);
             echo "No time for next request\n";
             break;
@@ -202,7 +218,7 @@ var_dump(json_decode($resp->isHttpCodeOk()));
 //var_dump($api->getRawResponse());
 //$resp->loadResponse($api->getRawResponse(), $api->getCurlInfo());
 //var_dump($resp->httpCode(), $resp->getData(), $resp->getError());
-exit();
+//exit();
 
 //end of update
 
@@ -228,48 +244,38 @@ $rep->addCallback($cb, ['234']);
 $cond = new \searchad\selector\Conditions();
 //$cond->addCondition("campaignId", \searchad\selector\Conditions::OPERATOR_IN, ["9923026"]);
 //$cond->addCondition("modificationTime", \searchad\selector\Conditions::OPERATOR_LESS_THAN, ["2016-10-21T0:0:0.00"]);
+if (false) {
+    $res = $cond->getConditions();
 
-$res = $cond->getConditions();
+    $sel = new \searchad\selector\Selector();
 
-$sel = new \searchad\selector\Selector();
 
-$selData = $sel->orderBy("adGroupName")
+    $selData = $sel->orderBy("adGroupName")
 //    ->selectFields(["taps", "impressions"])
-    ->setLimit(3)
-    ->setOffset(0)
-    ->setConditions($res)
-    ->getSelector();
+        ->setLimit(3)
+        ->setOffset(0)
+        ->setConditions($res)
+        ->getSelector();
 
-$rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
-    ->setStartTime('2016-10-22')
-    ->setEndTime('2016-10-22')
-    ->setSelector($selData)
-    ->setReturnRowTotals(true)
-    ->queryReportsSearchTerm(9923026);
+    $rep->setGranularity(\searchad\reports\ReportingRequest::GRANULARITY_DAILY)
+        ->setStartTime('2016-10-22')
+        ->setEndTime('2016-10-22')
+        ->setSelector($selData)
+        ->setReturnRowTotals(true)
+        ->queryReportsSearchTerm(9923026);
 
-$resp = new \searchad\ApiResponse();
-$resp->addCallback(function ($params) {
-    var_dump("response callback");
-    var_dump($params);
-}, []);
-$resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo());
+    $resp = new \searchad\ApiResponse();
+    $resp->addCallback(function ($params) {
+        var_dump("response callback");
+        var_dump($params);
+    }, []);
+    $resp->loadResponse($rep->getRawResponse(), $rep->getCurlInfo());
 
 
-var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
-exit();
+    var_dump(json_decode($rep->getRawResponse()), $rep->getRequestBody(true));
+    exit();
+}
 
-//----
-//Request with uri-params(limit and fields)
-
-$campaign = new \searchad\campaign\CampaignRequest();
-$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
-    ->setLimit(1)
-    ->setOrgId(140550)
-    ->setFields(['adamId', 'budgetAmount'])
-    ->queryCampaigns();
-
-var_dump($campaign->getRawResponse(), $campaign->getCurlInfo()['url']);
-//exit();
 //---
 
 $acl = new \searchad\access\AccessRequest();

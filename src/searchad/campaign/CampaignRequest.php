@@ -46,12 +46,13 @@ class CampaignRequest extends ApiRequest
     /**
      * POST /v1/campaigns/find
      * Find a list of campaigns within a specific org using selector json
-     * @param string $selector
+     * @param string|array $selector
      * @throws \Exception
      */
     public function queryCampaignsBySelector($selector)
     {
-        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setBody($selector)->setUrl("campaigns")->run();
+        $selector = is_string($selector) ? $selector : json_encode($selector);
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setBody($selector)->setUrl("campaigns/find")->run();
     }
 
     /**
