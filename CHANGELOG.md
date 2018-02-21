@@ -1,3 +1,6 @@
+# 1.1.22
+ - Fixing reset of custom options
+
 # 1.1.21
  - Allowing to add custom options to request class via 
   `->setCustomOptions` or `addCustiomOption`

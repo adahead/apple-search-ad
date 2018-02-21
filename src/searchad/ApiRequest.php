@@ -143,7 +143,6 @@ class ApiRequest extends BaseApi
         $this->limit = null;
         $this->offset = null;
         $this->requestStartTime = 0;
-        $this->customOptions = [];
         if ($this->fileHandler) {
             fclose($this->fileHandler);
         }
