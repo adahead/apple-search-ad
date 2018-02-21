@@ -36,6 +36,7 @@ class ApiRequest extends BaseApi
     protected $requestMode = 'W';
     protected $allowRun = true;
     protected $requestType = 'R';
+    protected $customOptions = [];
 
     protected $callbacks = [];
     protected $beforeCallbacks = [];
@@ -51,6 +52,35 @@ class ApiRequest extends BaseApi
     public function getLastRequestInfo()
     {
         return $this->lastRequestInfo;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function setCustomOptions($options = [])
+    {
+        $this->customOptions = $options;
+        return $this;
+    }
+
+    /**
+     * @param string $optionName
+     * @param mixed $value
+     * @return $this
+     */
+    public function addCustomOption($optionName, $value)
+    {
+        $this->customOptions[$optionName] = $value;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomOptions()
+    {
+        return $this->customOptions;
     }
 
     /**
@@ -73,7 +103,8 @@ class ApiRequest extends BaseApi
             'body' => $this->body,
             'time' => date('Y-m-d H:i:s'),
             'request_time' => microtime(true) - $this->requestStartTime,
-            'request_type' => $this->requestType
+            'request_type' => $this->requestType,
+            'custom_options' => $this->customOptions
         ];
         return $this;
     }
@@ -112,6 +143,7 @@ class ApiRequest extends BaseApi
         $this->limit = null;
         $this->offset = null;
         $this->requestStartTime = 0;
+        $this->customOptions = [];
         if ($this->fileHandler) {
             fclose($this->fileHandler);
         }

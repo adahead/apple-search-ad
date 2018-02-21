@@ -1,3 +1,8 @@
+# 1.1.21
+ - Allowing to add custom options to request class via 
+  `->setCustomOptions` or `addCustiomOption`
+ - Passing custom options to the `lastRequestInfo`
+
 # 1.1.20
  - Fixed POST /v1/campaigns/find request `queryCampaignsBySelector`
  - `queryCampaignsBySelector` now can receive array along with string
