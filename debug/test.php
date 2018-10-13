@@ -9,6 +9,7 @@ include_once '../src/searchad/ApiRequest.php';
 include_once '../src/searchad/ApiResponse.php';
 include_once '../src/searchad/reports/ReportingRequest.php';
 include_once '../src/searchad/campaign/CampaignRequest.php';
+include_once '../src/searchad/keywords/KeywordsRequest.php';
 include_once '../src/searchad/access/AccessRequest.php';
 
 include_once '../src/searchad/selector/Conditions.php';
@@ -32,8 +33,28 @@ $resp = new \searchad\ApiResponse();
 //    var_dump($e->getMessage());
 //}
 //exit;
-
-//----
+//---------- REMOVE TARGETING TEST -----------
+$body = '';
+$targeting = new \searchad\keywords\KeywordsRequest();
+$targeting->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->createOrUpdateNegative($body);
+var_dump($targeting->getRawResponse());
+exit;
+//--------------------------------------------
+//---------- REMOVE AD GROUP TEST ------------
+$campaign = new \searchad\campaign\CampaignRequest();
+$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->deleteAdGroupInCampaign();
+var_dump($campaign->getRawResponse());
+exit;
+//--------------------------------------------
+//---------- REMOVE CAMPAIGN TEST ------------
+$campaign = new \searchad\campaign\CampaignRequest();
+$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+    ->deleteCampaign();
+var_dump($campaign->getRawResponse());
+exit;
+//--------------------------------------------
 //Request with uri-params(limit and fields)
 
 $campaign = new \searchad\campaign\CampaignRequest();
@@ -155,7 +176,6 @@ while (1) {
 exit;
 
 ///--------------------------------
-///
 $cb = function ($params) use ($rep) {
 
 //    var_dump("Callback for request mode");

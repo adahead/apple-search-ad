@@ -77,6 +77,22 @@ class CampaignRequest extends ApiRequest
     }
 
     /**
+     * DELETE /v1/campaigns/<CAMPAIGN_ID>
+     * Delete an existing campaign within a specific org.
+     * It should return updated campaign object
+     * Or http code 400 if update is invalid
+     * @param int $campaignId
+     * @throws \Exception
+     */
+    public function deleteCampaign($campaignId)
+    {
+        if (!$campaignId) {
+            throw new \Exception("No campaign id is set");
+        }
+        $this->setRequestType(static::REQUEST_MODE_WRITE)->setDelete()->setUrl("campaigns/" . $campaignId)->run();
+    }
+
+    /**
      * GET /v1/campaigns/<CAMPAIGN_ID>/adgroups
      * Get a list of adgroups | one adgroup if $adGroupId is set -  within a specific campaign.
      * @param $campaignId
@@ -156,5 +172,24 @@ class CampaignRequest extends ApiRequest
 
     }
 
-
+    /**
+     * Delete an existing adgroup within a specific campaign.
+     * DELETE /v1/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>
+     * @param int $campaignId
+     * @param int $adGroupId
+     * @throws \Exception
+     */
+    public function deleteAdGroupInCampaign($campaignId, $adGroupId)
+    {
+        if (!$campaignId) {
+            throw new \Exception("No campaign id is set");
+        }
+        if (!$adGroupId) {
+            throw new \Exception("No adGroup  id is set");
+        }
+        $this->setRequestType(static::REQUEST_MODE_WRITE)
+            ->setDelete()
+            ->setUrl("campaigns/" . $campaignId . "/adgroups/" . $adGroupId)
+            ->run();
+    }
 }

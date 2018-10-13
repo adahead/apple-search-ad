@@ -455,6 +455,8 @@ class ApiRequest extends BaseApi
      */
     protected function handleDelete()
     {
+        $this->curlOptions[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+//        $this->setRequestHeader('Content-type', 'application/json');
         return $this;
     }
 
