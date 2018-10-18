@@ -120,6 +120,21 @@ class ReportingRequest extends ApiRequest
     }
 
     /**
+     * POST /v1/reports/campaigns/{campaignId}/creativesets
+     * Get reports on creative sets within a specific campaign
+     * @param $campaignId
+     * @throws \Exception
+     */
+    public function queryReportsOnCreativeSet($campaignId)
+    {
+        if (!$campaignId) {
+            throw new \Exception("No campaign id is set");
+        }
+        $this->checkRequired();
+        $this->setRequestType(static::REQUEST_MODE_READ)->setPost()->setUrl("reports/campaigns/" . $campaignId . "/creativesets")->setBody($this->compileRequestBody())->run();
+    }
+
+    /**
      * Throws exception if required field is not set
      * @return $this
      * @throws \Exception

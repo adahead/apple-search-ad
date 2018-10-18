@@ -33,6 +33,105 @@ $resp = new \searchad\ApiResponse();
 //    var_dump($e->getMessage());
 //}
 //exit;
+
+//----- GET CAMPAIGN CREATIVE SETS TEST ------
+//$body = '{
+//     "selector":{
+//         "fields":null,
+//         "conditions":[],
+//         "orderBy":null,
+//         "pagination":{
+//             "offset":0,
+//             "limit":20
+//        }
+//    }
+//}';
+//$campaign = new \searchad\campaign\CampaignRequest();
+//$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//        ->queryAdGroupCreativeSetsByCampaignId(<CAMPAIGN_ID>, $body);
+//var_dump(print_r($campaign->getRawResponse()));
+//exit;
+//--------------------------------------------
+
+//----- GET AD GROUP CREATIVE SETS TEST ------
+//$body = '{
+//   "selector":{
+//      "fields":null,
+//      "conditions":[
+//          {
+//             "field":"adGroupId",
+//             "operator":"EQUALS",
+//             "values":[
+//                 "<AD_GROUP_ID>"
+//             ],
+//             "ignoreCase":false
+//          }
+//      ],
+//      "orderBy":null,
+//      "pagination":{
+//         "offset":0,
+//         "limit":20
+//      }
+//   }
+//}';
+//$campaign = new \searchad\campaign\CampaignRequest();
+//$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//    ->queryAdGroupCreativeSetsByCampaignId(<CAMPAIGN_ID>, $body);
+//var_dump(print_r($campaign->getRawResponse()));
+//exit;
+//--------------------------------------------
+
+//------ GET ACCOUNT CREATIVE SETS TEST ------
+//$body = '{
+//       "selector":{
+//           "fields":null,
+//           "conditions":[],
+//           "orderBy":null,
+//           "pagination":{
+//               "offset":0,
+//               "limit":20
+//           }
+//       }
+//     }';
+//
+//$campaign = new \searchad\campaign\CampaignRequest();
+//$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//    ->queryCreativeSets($body);
+//var_dump(print_r($campaign->getRawResponse()));
+//exit;
+//--------------------------------------------
+
+//-- UPDATE STATUS OF A CREATIVE SETS TEST ---
+//$body = '{"status": "ENABLED"}';
+//$campaign = new \searchad\campaign\CampaignRequest();
+//$campaign->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//    ->updateAdGroupCreativeSets(<CAMPAIGN_ID>, <AD_GROUP_ID>, <AD_GROUP_CREATIVE_SET_ID>, $body);
+//var_dump(print_r($campaign->getRawResponse()));
+//exit;
+//--------------------------------------------
+
+//--- GET REPORTS ON CREATIVE SETS BY CAMPAIGN ID ---
+//$conditions = new \searchad\selector\Conditions();
+//$conditionsData = $conditions->getConditions();
+//
+//$selector = new \searchad\selector\Selector();
+//$selectorData = $selector->orderBy("impressions")
+//    ->setOffset(0)
+//    ->setLimit(10)
+//    ->setConditions($conditionsData)
+//    ->getSelector();
+//
+//$reporting = new \searchad\reports\ReportingRequest();
+//$reporting->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//    ->setStartTime('2018-10-12')
+//    ->setEndTime('2018-10-17')
+//    ->setSelector($selectorData)
+//    ->setReturnRowTotals(true)
+//    ->queryReportsOnCreativeSet(<CAMPAIGN_ID>);
+//var_dump($reporting->getRawResponse());
+//exit;
+//---------------------------------------------------
+
 //---------- REMOVE TARGETING TEST -----------
 $body = '';
 $targeting = new \searchad\keywords\KeywordsRequest();
