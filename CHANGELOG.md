@@ -1,3 +1,12 @@
+# 1.1.25
+ - Added support for v2 of api
+
+# 1.1.24
+ - Added methods for managing creative sets
+
+# 1.1.23
+  - Added deleteCampaign and deleteAdGroupInCampaign methods
+
 # 1.1.22
  - Fixing reset of custom options
 

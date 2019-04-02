@@ -74,5 +74,4 @@ class KeywordsRequest extends ApiRequest
 
         $this->setRequestType(static::REQUEST_MODE_WRITE)->setPost()->setUrl("keywords/negative")->setBody($body)->run();
     }
-
 }
