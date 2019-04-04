@@ -11,7 +11,8 @@ namespace searchad_v2\keyword;
 
 use searchad_v2\ApiRequest;
 
-class KeywordRequest extends ApiRequest {
+class KeywordRequest extends ApiRequest
+{
 
     const STATUS_ACTIVE = 'ACTIVE';
     const STATUS_PAUSED = 'PAUSED';
