@@ -13,6 +13,9 @@ use searchad_v2\ApiRequest;
 
 class KeywordRequest extends ApiRequest {
 
+    const STATUS_ACTIVE = 'ACTIVE';
+    const STATUS_PAUSED = 'PAUSED';
+
     //---------------------------------------------
     //---------Ad Group Targeting Keywords---------
     //---------------------------------------------
