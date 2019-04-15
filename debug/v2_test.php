@@ -308,7 +308,7 @@ include_once '../src/searchad_v2/report/ReportingRequest.php';
 //-----------Delete Ad Groups Test-------------------
 //$request = new \searchad_v2\adgroup\AdGroupRequest();
 //$request->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
-//    ->setOrgId(186130);
+//    ->setOrgId();
 //
 //$request->deleteAdGroupInCampaign();
 //
@@ -319,3 +319,45 @@ include_once '../src/searchad_v2/report/ReportingRequest.php';
 //var_dump($response->getData(), $response->getError());
 //exit();
 //---------------------------------------------------
+
+//-----------Query Campaign Negative Keywords Ad Groups Test-------------------
+
+//$request = new \searchad_v2\keyword\KeywordRequest();
+//$request->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//        ->setOrgId();
+//
+//$request->queryCampaignNegativeKeywords();
+//
+//$response = new \searchad_v2\ApiResponse();
+//$response->loadResponse($request->getRawResponse(), $request->getCurlInfo());
+//var_dump(
+////    $request->getRawResponse(),
+//    $response->getData(),
+//    $response->getError()
+//);
+//exit();
+//-----------------------------------------------------------------------------
+
+//----------------------------Create Keywords Ad Groups Test-------------------
+
+//$body = [
+//    [
+//        'text' => 'key1',
+//        'matchType' => 'EXACT',
+//        'bidAmount' => [
+//            'amount' => '0.1',
+//            'currency' => 'USD'
+//        ],
+//        'adGroupId' =>
+//    ]
+//];
+//
+//$request = new \searchad_v2\keyword\KeywordRequest();
+//$request->loadCertificates(__DIR__ . '/test.pem', __DIR__ . '/test.key')
+//        ->setOrgId();
+//
+//$request->createTargetingKeywords(, , json_encode($body));
+//
+//var_dump($request->requestUrl, $request->getRawResponse());die();
+
+//-----------------------------------------------------------------------------

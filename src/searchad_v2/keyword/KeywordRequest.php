@@ -97,7 +97,7 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No body is set");
         }
 
-        $url = 'campaigns/' . $campaignId . '/adgroup/' . $adGroupId . '/targetingkeywords/bulk';
+        $url = 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/bulk';
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setPost()
@@ -127,7 +127,7 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No body is set");
         }
 
-        $url = 'campaigns/' . $campaignId . '/adgroup/' . $adGroupId . '/targetingkeywords/bulk';
+        $url = 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/bulk';
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setPut()
