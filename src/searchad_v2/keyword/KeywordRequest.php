@@ -22,7 +22,7 @@ class KeywordRequest extends ApiRequest
     //---------------------------------------------
 
     /**
-     * GET /v2/campaigns/<CAMPAIGN_ID>/adgroup/<ADGROUP_ID>/targetingkeywords | /v1/campaigns/<CAMPAIGN_ID>/adgroup/<ADGROUP_ID>/targetingkeywords/<KEYWORD_ID>
+     * GET /v2/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>/targetingkeywords | /v1/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>/targetingkeywords/<KEYWORD_ID>
      * Find a list or specific of targeted keywords within a specific org.
      * @param $campaignId
      * @param $adGroupId
@@ -38,7 +38,7 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No ad group id is set");
         }
 
-        $url = $keywordId ? 'campaigns/' . $campaignId . '/adgroup/' . $adGroupId . '/targetingkeywords/' . $keywordId : 'campaigns/' . $campaignId . '/adgroup/' . $adGroupId . '/targetingkeywords';
+        $url = $keywordId ? 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/' . $keywordId : 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords';
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setGet()
@@ -47,7 +47,7 @@ class KeywordRequest extends ApiRequest
     }
 
     /**
-     * POST /v2/campaigns/<CAMPAIGN_ID>/adgroup/<ADGROUP_ID>/targetingkeywords/find
+     * POST /v2/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>/targetingkeywords/find
      * Find a list of targeted keywords within a specific org.
      * @param $campaignId
      * @param $adGroupId
@@ -67,7 +67,7 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No selector is set");
         }
 
-        $url = 'campaigns/' . $campaignId . '/adgroup/' . $adGroupId . '/targetingkeywords/find';
+        $url = 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/find';
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setPost()
@@ -77,7 +77,7 @@ class KeywordRequest extends ApiRequest
     }
 
     /**
-     * POST /v2/campaigns/<CAMPAIGN_ID>/adgroup/<ADGROUP_ID>/targetingkeywords/bulk
+     * POST /v2/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>/targetingkeywords/bulk
      * Create a list of targeted keywords within a specific org.
      * @param $campaignId
      * @param $adGroupId
@@ -107,7 +107,7 @@ class KeywordRequest extends ApiRequest
     }
 
     /**
-     * PUT /v2/campaigns/<CAMPAIGN_ID>/adgroup/<ADGROUP_ID>/targetingkeywords/bulk
+     * PUT /v2/campaigns/<CAMPAIGN_ID>/adgroups/<ADGROUP_ID>/targetingkeywords/bulk
      * Update a list of targeted keywords within a specific org.
      * @param $campaignId
      * @param $adGroupId
