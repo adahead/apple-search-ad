@@ -61,6 +61,7 @@ class ReportingRequest extends ApiRequest
     protected $timezone;
     protected $groupBy;
     protected $returnRowTotals = null;
+    protected $returnGrandTotals = false;
     protected $returnRecordsWithNoMetrics = false;
     protected $selector;
 
@@ -72,7 +73,7 @@ class ReportingRequest extends ApiRequest
     protected $requestBody = [];
 
     protected $requiredFields = ['startTime', 'endTime', 'selector'];
-    protected $possibleFields = ['granularity', 'timezone', 'groupBy', 'returnRowTotals', 'returnRecordsWithNoMetrics'];
+    protected $possibleFields = ['granularity', 'timezone', 'groupBy', 'returnRowTotals', 'returnGrandTotals', 'returnRecordsWithNoMetrics'];
 
     /**
      * @param $granularity
@@ -149,6 +150,21 @@ class ReportingRequest extends ApiRequest
         }
 
         $this->returnRowTotals = $return;
+
+        return $this;
+    }
+
+    /**
+     * @param bool|null $return
+     * @return $this
+     * @throws \Exception
+     */
+    public function setReturnGrandTotals($return) {
+        if (!is_bool($return) && !is_null($return)) {
+            throw  new \Exception("Return grand totals value should be boolean or null");
+        }
+
+        $this->returnGrandTotals = $return;
 
         return $this;
     }

@@ -29,7 +29,7 @@ class KeywordRequest extends ApiRequest
      * @param null $keywordId
      * @throws \Exception
      */
-    public function queryTargetingKeywords($campaignId, $adGroupId, $keywordId = null) {
+    public function queryTargetingKeywords($campaignId, $adGroupId, $keywordId = null, $offset = 0, $limit = 5000) {
         if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
@@ -38,7 +38,7 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No ad group id is set");
         }
 
-        $url = $keywordId ? 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/' . $keywordId : 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords';
+        $url = $keywordId ? 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/' . $keywordId : 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords' . "?offset=$offset&limit=$limit";
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setGet()
@@ -59,15 +59,16 @@ class KeywordRequest extends ApiRequest
             throw new \Exception("No campaign id is set");
         }
 
-        if(!$adGroupId) {
-            throw new \Exception("No ad group id is set");
-        }
+//        if(!$adGroupId) {
+//            throw new \Exception("No ad group id is set");
+//        }
 
         if (!$selector) {
             throw new \Exception("No selector is set");
         }
 
         $url = 'campaigns/' . $campaignId . '/adgroups/' . $adGroupId . '/targetingkeywords/find';
+        $url = 'campaigns/' . $campaignId . '/adgroups' . '/targetingkeywords/find';
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setPost()
@@ -147,12 +148,12 @@ class KeywordRequest extends ApiRequest
      * @param null $keywordId
      * @throws \Exception
      */
-    public function queryCampaignNegativeKeywords($campaignId, $keywordId = null) {
+    public function queryCampaignNegativeKeywords($campaignId, $keywordId = null, $offset = 0, $limit = 5000) {
         if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }
 
-        $url = $keywordId ? '/campaigns/' . $campaignId . '/negativekeywords/' . $keywordId : '/campaigns/' . $campaignId . '/negativekeywords';
+        $url = $keywordId ? '/campaigns/' . $campaignId . '/negativekeywords/' . $keywordId : '/campaigns/' . $campaignId . '/negativekeywords' . "?offset=$offset&limit=$limit";
 
         $this->setRequestType(static::REQUEST_MODE_READ)
             ->setGet()
@@ -267,7 +268,7 @@ class KeywordRequest extends ApiRequest
      * @param null $keywordId
      * @throws \Exception
      */
-    public function queryAdGroupNegativeKeywords($campaignId, $adGroupId, $keywordId = null) {
+    public function queryAdGroupNegativeKeywords($campaignId, $adGroupId, $keywordId = null, $offset = 0, $limit = 5000) {
         if (!$campaignId) {
             throw new \Exception("No campaign id is set");
         }

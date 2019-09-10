@@ -217,36 +217,53 @@ class ApiRequest extends BaseApi
      * @return $this
      */
     public function run() {
-        $this->runBeforeCallbacks();
-        if (!$this->allowRun) {
-            $this->response = json_encode(['data' => true]);
+        $retryTimes = 5;
+
+        while ($retryTimes > 0 ){
+            $this->runBeforeCallbacks();
+            if (!$this->allowRun) {
+                $this->response = json_encode(['data' => true]);
+                return $this;
+            }
+            $this->init();
+            $this->handleUriParams();
+            $this->curl = curl_init($this->requestUrl);
+
+            $handleMethod = "handle" . ucfirst(strtolower($this->currentMethod));
+
+            $this->{$handleMethod}();
+            $this->setHeaders();
+            $this->requestStartTime = microtime(true);
+
+            curl_setopt_array($this->curl, $this->curlOptions);
+
+            $this->response = curl_exec($this->curl);
+            $this->curlError = curl_error($this->curl);
+            $this->curlInfo = curl_getinfo($this->curl);
+
+            curl_close($this->curl);
+            $this->setLastRequestInfo();
+            $this->runCallbacks();
+            $this->resetParams();
+            if (!$this->response && $this->curlError) {
+                if ($retryTimes <=1){
+                    throw new \Exception("Curl error: " . $this->curlError);
+                }else{
+                    $retryTimes--;
+                    continue;
+                }
+            }
+            $response = new ApiResponse();
+            $response->loadResponse($this->getRawResponse(), $this->getCurlInfo());
+            if ($response->getError()){
+                if ($retryTimes > 1){
+                    $retryTimes--;
+                    continue;
+                }
+            }
+
             return $this;
         }
-        $this->init();
-        $this->handleUriParams();
-        $this->curl = curl_init($this->requestUrl);
-
-        $handleMethod = "handle" . ucfirst(strtolower($this->currentMethod));
-
-        $this->{$handleMethod}();
-        $this->setHeaders();
-        $this->requestStartTime = microtime(true);
-
-        curl_setopt_array($this->curl, $this->curlOptions);
-
-        $this->response = curl_exec($this->curl);
-        $this->curlError = curl_error($this->curl);
-        $this->curlInfo = curl_getinfo($this->curl);
-
-        curl_close($this->curl);
-        $this->setLastRequestInfo();
-        $this->runCallbacks();
-        $this->resetParams();
-        if (!$this->response && $this->curlError) {
-            throw new \Exception("Curl error: " . $this->curlError);
-        }
-
-        return $this;
     }
 
     /**
