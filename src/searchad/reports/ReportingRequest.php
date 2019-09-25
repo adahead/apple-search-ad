@@ -25,7 +25,7 @@ use searchad\ApiRequest;
  *
  * @property string $startTime yyyy-mm-dd
  * @property string $endTime yyyy-mm-dd
- * @property string $timezone ORTZ,UTC Default ORTZ.
+ * @property string $timeZone ORTZ,UTC Default ORTZ.
  *
  * Field to group by; maximum one in the list.
  * Currently supported field options:
@@ -53,7 +53,7 @@ use searchad\ApiRequest;
 class ReportingRequest extends ApiRequest
 {
 
-    protected $granularity, $startTime, $endTime, $timezone, $groupBy, $returnRowTotals = null, $returnRecordsWithNoMetrics = false;
+    protected $granularity, $startTime, $endTime, $timeZone, $groupBy, $returnRowTotals = null, $returnRecordsWithNoMetrics = false;
     protected $selector;
 
     const GRANULARITY_DAILY = 'DAILY';
@@ -64,7 +64,7 @@ class ReportingRequest extends ApiRequest
     protected $requestBody = [];
 
     protected $requiredFields = ['startTime', 'endTime', 'selector'];
-    protected $possibleFields = ['granularity', 'timezone', 'groupBy', 'returnRowTotals', 'returnRecordsWithNoMetrics'];
+    protected $possibleFields = ['granularity', 'timeZone', 'groupBy', 'returnRowTotals', 'returnRecordsWithNoMetrics'];
 
     /**
      * POST /v1/reports/campaigns
@@ -236,9 +236,9 @@ class ReportingRequest extends ApiRequest
         return $this;
     }
 
-    public function setTimezone($tz)
+    public function setTimeZone($tz)
     {
-        $this->timezone = $tz;
+        $this->timeZone = $tz;
         return $this;
     }
 
