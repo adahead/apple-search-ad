@@ -27,7 +27,7 @@ use searchad_v2\ApiRequest;
  *
  * @property string $startTime yyyy-mm-dd
  * @property string $endTime yyyy-mm-dd
- * @property string $timeZone ORTZ,UTC Default ORTZ.
+ * @property string $timezone ORTZ,UTC Default ORTZ.
  *
  * Field to group by; maximum one in the list.
  * Currently supported field options:
@@ -58,7 +58,7 @@ class ReportingRequest extends ApiRequest
     protected $granularity;
     protected $startTime;
     protected $endTime;
-    protected $timeZone;
+    protected $timezone;
     protected $groupBy;
     protected $returnRowTotals = null;
     protected $returnRecordsWithNoMetrics = false;
@@ -72,7 +72,7 @@ class ReportingRequest extends ApiRequest
     protected $requestBody = [];
 
     protected $requiredFields = ['startTime', 'endTime', 'selector'];
-    protected $possibleFields = ['granularity', 'timeZone', 'groupBy', 'returnRowTotals', 'returnRecordsWithNoMetrics'];
+    protected $possibleFields = ['granularity', 'timezone', 'groupBy', 'returnRowTotals', 'returnRecordsWithNoMetrics'];
 
     /**
      * @param $granularity
@@ -132,8 +132,8 @@ class ReportingRequest extends ApiRequest
      * @param $tz
      * @return $this
      */
-    public function setTimeZone($tz) {
-        $this->timeZone = $tz;
+    public function setTimezone($tz) {
+        $this->timezone = $tz;
 
         return $this;
     }
@@ -175,7 +175,7 @@ class ReportingRequest extends ApiRequest
      */
     public function setGroupBy($groupField)
     {
-        $possible = ['countryCode', 'adminArea', 'deviceClass', 'ageRange', 'locality', 'gender'];
+        $possible = ['countryOrRegion', 'adminArea', 'deviceClass', 'ageRange', 'locality', 'gender'];
         $groupFields = is_string($groupField) ? [$groupField] : $groupField;
         $validFields = [];
         foreach($groupFields as $field){
